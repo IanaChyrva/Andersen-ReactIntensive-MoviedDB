@@ -1,0 +1,33 @@
+.header {
+  padding: 10px;
+  height: 50px;
+  background-color: black;
+  color: white;
+  display: flex;
+  align-items: center;
+
+  justify-content: space-between;
+  position: relative;
+}
+
+.logo {
+  color: green;
+}
+
+.logoContainer > h1 {
+  margin: 0;
+}
+
+.item {
+  color: white;
+  text-decoration: none;
+}
+
+.selected {
+  font-size: 23px;
+  text-decoration: underline;
+}
+
+.profileContainer {
+  display: flex;
+}
