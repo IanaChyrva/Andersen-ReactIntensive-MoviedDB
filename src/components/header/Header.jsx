@@ -30,6 +30,13 @@ export default function Header() {
         History
       </NavLink>
       <NavLink
+        to='/sign-up'
+        className={styles.item}
+        activeClassName={styles.selected}
+      >
+        Sign-Up
+      </NavLink>
+      <NavLink
         to='/login'
         className={styles.item}
         activeClassName={styles.selected}
