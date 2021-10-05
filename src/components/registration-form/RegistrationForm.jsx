@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Switch, Route, NavLink } from 'react-router-dom';
 
 import Form from 'react-bootstrap/Form';
@@ -12,35 +12,51 @@ const getUserData = () => {
   const storeData = localStorage.getItem('sign - up - info');
   if (!storeData) {
     return {
-      name: '',
-      lastname: '',
-      email: '',
-      password: '',
+      initName: '',
+      initLastname: '',
+      initEmail: '',
+      initPassword: '',
     };
   }
   return JSON.stringify(storeData);
 };
 
 const RegistrationForm = () => {
-  const [name, setName] = useState(getUserData().name);
-  const [lastname, setLastname] = useState(getUserData().lastname);
-  const [email, setEmail] = useState(getUserData().email);
-  const [password, setPassword] = useState(getUserData().password);
+  const { initName, initLastname, initEmail, initPassword } = getUserData();
 
-  localStorage.setItem(
-    'sign-up-info',
-    JSON.stringify({ name, lastname, email, password })
-  );
+  const [name, setName] = useState(initName);
+  const [lastname, setLastname] = useState(initLastname);
+  const [email, setEmail] = useState(initEmail);
+  const [password, setPassword] = useState(initPassword);
+
   const onSignUp = (e) => {
     e.preventDefault();
 
     if (!name || !lastname || !email || !password) {
+      console.log('Check for inputs fill');
+      return;
     } else {
       localStorage.setItem(
         'sign-up-info',
         JSON.stringify({ name, lastname, email, password })
       );
     }
+  };
+
+  const onNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const onLastnameChange = (e) => {
+    setLastname(e.target.value);
+  };
+
+  const onEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const onPasswordChange = (e) => {
+    setPassword(e.target.value);
   };
 
   return (
@@ -52,15 +68,15 @@ const RegistrationForm = () => {
               <Form.Label>Name</Form.Label>
               <Form.Control
                 placeholder='First name'
-                onChange={(e) => setName(e.target.value)}
                 value={name}
+                onChange={onNameChange}
               />
             </Col>
             <Col>
               <Form.Label>Lastname</Form.Label>
               <Form.Control
                 placeholder='Last name'
-                onChange={(e) => setLastname(e.target.value)}
+                onChange={onLastnameChange}
                 value={lastname}
               />
             </Col>
@@ -72,7 +88,7 @@ const RegistrationForm = () => {
           <Form.Control
             type='email'
             placeholder='Enter email'
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={onEmailChange}
             value={email}
           />
           <Form.Text className='text-muted'>
@@ -85,7 +101,7 @@ const RegistrationForm = () => {
           <Form.Control
             type='password'
             placeholder='Password'
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={onPasswordChange}
             value={password}
           />
         </Form.Group>
