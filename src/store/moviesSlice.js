@@ -6,7 +6,8 @@ export const fetchMovies = createAsyncThunk(
   async function(text, {rejectWithValue}) {
     try {
       const response = await getMovieByName(text);
-      return response.Search
+      console.log(response)
+      return response
     }
     catch (error) {
       return rejectWithValue(error.message)
@@ -14,24 +15,19 @@ export const fetchMovies = createAsyncThunk(
   }
 )
 const initialState = {
-        text: '',
         movies: [],
         movie: [],
         status: '',
         error: null
       };
 
-const searchSlice = createSlice({
+const moviesSlice = createSlice({
     name: 'movies',
     initialState,
     reducers: {
-      searchMovie(state, action) {
-          console.log(state)
-          console.log(action)
-        state.text = action.payload
-      },
       loadMovies(state, action) {
         state.movies = action.payload
+        console.log(state.movies)
       }
     },
     extraReducers: {
@@ -50,8 +46,8 @@ const searchSlice = createSlice({
      }
 }) 
 
-export const { searchMovie, loadMovies } = searchSlice.actions
-export const searchReducer = searchSlice.reducer
+export const { loadMovies } = moviesSlice.actions
+export const moviesReducer = moviesSlice.reducer
 
    
       
