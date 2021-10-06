@@ -10,6 +10,8 @@ import Sidebar from './components/sidebar/Sidebar';
 import { SearchPanel } from './components/search-panel/searchPanel';
 import store from './store/index';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (
