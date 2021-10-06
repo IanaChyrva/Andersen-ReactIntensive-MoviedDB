@@ -16,15 +16,19 @@ const userAccountSlice = createSlice({
     },
 
     login: (state, action) => {
-      //user login
+      state.currentUser = action.payload.currentUser || null;
+      state.isLoggedIn = true;
     },
 
     logout: (state, action) => {
-      //user logout
+      state.currentUser = null;
+      state.isLoggedIn = false;
     },
 
     getUsers: (state, action) => {
-      state.users = action.payload || [];
+      state.users = action.payload.users || [];
+      state.isLoggedIn = action.payload.isLoggedIn || false;
+      state.currentUser = action.payload.currentUser || null;
     },
 
     startApp: (state) => {

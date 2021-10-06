@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+
 import Favourite from '../favourite/Favourite';
 import History from '../history/History';
 import Home from '../home/Home';
@@ -7,15 +8,7 @@ import LoginPage from '../login-page/LoginPage';
 import RegistrationForm from '../registration-form/RegistrationForm';
 import styles from './Main.module.css';
 
-import { startApp } from '../../store/userAccountSlice';
-import { useDispatch, useSelector } from 'react-redux';
-
 const Main = () => {
-  const dispatch = useDispatch();
-  dispatch(startApp());
-  // const users = useSelector((state) => state.users);
-  // console.log(users);
-
   return (
     <div className={styles.mainWindow}>
       <Switch>
@@ -36,9 +29,6 @@ const Main = () => {
         </Route>
         <Route path='/login'>
           <LoginPage />
-        </Route>
-        <Route path='/logout'>
-          <div>Logout</div>
         </Route>
       </Switch>
     </div>

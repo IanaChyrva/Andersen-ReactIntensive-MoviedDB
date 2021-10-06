@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Switch, Route, NavLink } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { Switch, Route, NavLink, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { signup } from '../../store/userAccountSlice';
 
 import Form from 'react-bootstrap/Form';
@@ -10,30 +10,14 @@ import Col from 'react-bootstrap/Col';
 import styles from './RegistrationForm.module.css';
 import LoginPage from '../login-page/LoginPage';
 
-const getUserData = () => {
-  const storeData = localStorage.getItem('sign - up - info');
-  if (!storeData) {
-    return {
-      initName: '',
-      initLastname: '',
-      initEmail: '',
-      initPassword: '',
-    };
-  }
-  return JSON.stringify(storeData);
-};
-
 const RegistrationForm = () => {
-  const state = useSelector((state) => state.users.users);
-
+  const history = useHistory();
   const dispatch = useDispatch();
 
-  const { initName, initLastname, initEmail, initPassword } = getUserData();
-
-  const [name, setName] = useState(initName);
-  const [lastname, setLastname] = useState(initLastname);
-  const [email, setEmail] = useState(initEmail);
-  const [password, setPassword] = useState(initPassword);
+  const [name, setName] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const onSignUp = (e) => {
     e.preventDefault();
@@ -47,7 +31,7 @@ const RegistrationForm = () => {
         JSON.stringify({ name, lastname, email, password })
       );
       dispatch(signup({ name, lastname, email, password }));
-      console.log(state);
+      history.push('/login');
     }
   };
 
@@ -145,11 +129,5 @@ const RegistrationForm = () => {
     </div>
   );
 };
-
-// ToDo
-// To add authentication redirection to login page
-// Add verification for form
-// Add visual message to user, if something is missing and data is wrong
-// Add styling for navigation (hide or show depending on user login info)
 
 export default RegistrationForm;
