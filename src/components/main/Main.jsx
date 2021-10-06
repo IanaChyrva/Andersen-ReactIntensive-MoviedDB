@@ -2,17 +2,19 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Favourite from '../favourite/Favourite';
 import History from '../history/History';
-import Home from '../home/Home';
+import { SearchPanel } from '../search-panel/SearchPanel'
 import LoginPage from '../login-page/LoginPage';
 import RegistrationForm from '../registration-form/RegistrationForm';
-import styles from './Main.module.css';
+import {MoviesList} from '../movies-list/moviesList'
+import { SearchForm } from '../search-panel/SearchForm'
+import './Main.css'
 
 const Main = () => {
   return (
-    <div className={styles.mainWindow}>
+    <div className='mainWindow'>
       <Switch>
         <Route exact path='/'>
-          <Home />
+          <SearchPanel/>
         </Route>
         <Route path='/history'>
           <History />
@@ -31,6 +33,12 @@ const Main = () => {
         </Route>
         <Route path='/logout'>
           <div>Logout</div>
+        </Route>
+        <Route path='/search'>
+          <div>
+          <SearchForm/>
+          <MoviesList />
+          </div>
         </Route>
       </Switch>
     </div>

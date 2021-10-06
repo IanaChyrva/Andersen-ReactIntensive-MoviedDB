@@ -1,0 +1,20 @@
+.moviesList {
+    margin-top: 50px;
+    margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: repeat(4, 220px);
+    grid-auto-columns: 200px;
+    grid-template-rows: repeat(2, minmax(350px, auto));
+    grid-auto-rows: minmax(350px, auto);
+    gap: 20px 35px;
+    justify-items: center;
+} 
+
+.blockNotFound {
+    margin-top: 50px;
+}
+
+.blockNotFound_text {
+    text-align: center;
+    font-size: 20px;
+}
