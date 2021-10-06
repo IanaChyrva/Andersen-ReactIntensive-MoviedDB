@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Switch, Route, NavLink } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { signup } from '../../store/userAccountSlice';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -22,6 +24,10 @@ const getUserData = () => {
 };
 
 const RegistrationForm = () => {
+  const state = useSelector((state) => state.users.users);
+
+  const dispatch = useDispatch();
+
   const { initName, initLastname, initEmail, initPassword } = getUserData();
 
   const [name, setName] = useState(initName);
@@ -40,6 +46,8 @@ const RegistrationForm = () => {
         'sign-up-info',
         JSON.stringify({ name, lastname, email, password })
       );
+      dispatch(signup({ name, lastname, email, password }));
+      console.log(state);
     }
   };
 

@@ -12,20 +12,18 @@ import store from './store/index';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 function App() {
   return (
     <Provider store={store}>
       <Router>
-      <Header />
-      <div className='body'>
-        <Sidebar />
-        <Main/>
-        <SearchPanel/>
-      </div>
-    </Router>
+        <Header />
+        <div className='body'>
+          <Sidebar />
+          <Main />
+          <SearchPanel />
+        </div>
+      </Router>
     </Provider>
-    
   );
 }
 
