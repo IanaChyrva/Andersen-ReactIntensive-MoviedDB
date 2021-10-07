@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import Favourite from '../favourite/Favourite';
 import History from '../history/History';
-import { SearchPanel } from '../search-panel/SearchPanel';
+import { SearchPanel } from '../search-panel/searchPanel';
 import LoginPage from '../login-page/LoginPage';
 import RegistrationForm from '../registration-form/RegistrationForm';
 import { MoviesList } from '../movies-list/moviesList';
