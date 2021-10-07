@@ -1,21 +1,18 @@
 import React from 'react';
 import { useState } from 'react'
-import {useDispatch} from 'react-redux'
+// import {useDispatch} from 'react-redux'
 import { useHistory } from "react-router-dom";
-import { fetchMovies } from '../../store/moviesSlice'
 import './SearchPanel.css'
 
 export const SearchForm = () => {
   const [text, setText] = useState('')
-  const dispatch = useDispatch()
   let history = useHistory();
   const onValueChange = (e) => {
       setText(e.target.value)
   }
   const onFetch = (e) => {
     e.preventDefault();
-    dispatch(fetchMovies(text));
-    history.push("/search")
+    history.push(`/search?text=${text}`)
     setText('')
   }
   return(

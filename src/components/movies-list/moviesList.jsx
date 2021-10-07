@@ -1,12 +1,21 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { MovieItem } from '../movie-item/MovieItem'
+import { useEffect } from 'react'
+import { fetchMovies } from '../../store/moviesSlice'
 import imageNotFound from '../../assets/images/nothing-icon.jpg'
 import './moviesList.css'
 
+;
 export const MoviesList = () => {
+    const parsedUrl = new URL(window.location.href);
+    const text = parsedUrl.searchParams.get("text");
     const {movies, status} = useSelector(state => state.movies)
-  
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(fetchMovies(text)) 
+    }, [text])
+
     const MoviesBlock = () => {
         return (
             <div className='moviesList'>
