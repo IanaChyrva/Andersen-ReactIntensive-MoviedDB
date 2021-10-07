@@ -6,7 +6,6 @@ import Header from './components/header/Header';
 
 import Main from './components/main/Main';
 import Sidebar from './components/sidebar/Sidebar';
-import { SearchPanel } from './components/search-panel/searchPanel';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { startApp } from './store/userAccountSlice';
@@ -21,7 +20,6 @@ function App() {
       <div className='body'>
         <Sidebar />
         <Main />
-        <SearchPanel />
       </div>
     </Router>
   );
