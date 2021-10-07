@@ -1,23 +1,38 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { login } from '../../store/userAccountSlice';
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 const LoginPage = () => {
+  const users = useSelector((state) => state.users.users);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setloginPassword] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
-    const savedEmail = JSON.parse(localStorage.getItem('sign-up-info')).email;
-    const savedPassword = JSON.parse(
-      localStorage.getItem('sign-up-info')
-    ).password;
-    if (!savedEmail || !savedPassword) return;
-    if (savedEmail === loginEmail && savedPassword === loginPassword) {
-      console.log('yeeee');
+
+    if (!loginEmail || !loginPassword) {
+      console.log('Meh, fill all fields');
       return;
     }
-    console.log('Wrongs data, please try again');
+
+    const currentUser = users.find(
+      (user) => user.email === loginEmail && user.password === loginPassword
+    );
+
+    if (currentUser) {
+      dispatch(login({ currentUser, isLoggedIn: true }));
+      history.push('/');
+    } else {
+      console.log('Meh! Wrong data. Are you a hucker?');
+    }
+    console.log(users);
   };
 
   return (

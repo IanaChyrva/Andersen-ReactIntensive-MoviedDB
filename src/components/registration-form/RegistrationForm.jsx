@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Switch, Route, NavLink } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Switch, Route, NavLink, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { signup } from '../../store/userAccountSlice';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -8,26 +10,14 @@ import Col from 'react-bootstrap/Col';
 import styles from './RegistrationForm.module.css';
 import LoginPage from '../login-page/LoginPage';
 
-const getUserData = () => {
-  const storeData = localStorage.getItem('sign - up - info');
-  if (!storeData) {
-    return {
-      initName: '',
-      initLastname: '',
-      initEmail: '',
-      initPassword: '',
-    };
-  }
-  return JSON.stringify(storeData);
-};
-
 const RegistrationForm = () => {
-  const { initName, initLastname, initEmail, initPassword } = getUserData();
+  const history = useHistory();
+  const dispatch = useDispatch();
 
-  const [name, setName] = useState(initName);
-  const [lastname, setLastname] = useState(initLastname);
-  const [email, setEmail] = useState(initEmail);
-  const [password, setPassword] = useState(initPassword);
+  const [name, setName] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const onSignUp = (e) => {
     e.preventDefault();
@@ -40,6 +30,8 @@ const RegistrationForm = () => {
         'sign-up-info',
         JSON.stringify({ name, lastname, email, password })
       );
+      dispatch(signup({ name, lastname, email, password }));
+      history.push('/login');
     }
   };
 
@@ -137,11 +129,5 @@ const RegistrationForm = () => {
     </div>
   );
 };
-
-// ToDo
-// To add authentication redirection to login page
-// Add verification for form
-// Add visual message to user, if something is missing and data is wrong
-// Add styling for navigation (hide or show depending on user login info)
 
 export default RegistrationForm;

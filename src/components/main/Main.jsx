@@ -1,20 +1,21 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+
 import Favourite from '../favourite/Favourite';
 import History from '../history/History';
-import { SearchPanel } from '../search-panel/SearchPanel'
+import { SearchPanel } from '../search-panel/SearchPanel';
 import LoginPage from '../login-page/LoginPage';
 import RegistrationForm from '../registration-form/RegistrationForm';
-import {MoviesList} from '../movies-list/moviesList'
-import { SearchForm } from '../search-panel/SearchForm'
-import './Main.css'
+import { MoviesList } from '../movies-list/moviesList';
+import { SearchForm } from '../search-panel/SearchForm';
+import './Main.css';
 
 const Main = () => {
   return (
     <div className='mainWindow'>
       <Switch>
         <Route exact path='/'>
-          <SearchPanel/>
+          <SearchPanel />
         </Route>
         <Route path='/history'>
           <History />
@@ -36,8 +37,8 @@ const Main = () => {
         </Route>
         <Route path='/search'>
           <div>
-          <SearchForm/>
-          <MoviesList />
+            <SearchForm />
+            <MoviesList />
           </div>
         </Route>
       </Switch>
