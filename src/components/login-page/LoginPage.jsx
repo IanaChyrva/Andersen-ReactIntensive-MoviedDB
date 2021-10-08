@@ -1,38 +1,54 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { login } from '../../store/userAccountSlice';
+import { useInput } from '../../hooks/useInput';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 const LoginPage = () => {
-  const users = useSelector((state) => state.users.users);
+  const { users } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginPassword, setloginPassword] = useState('');
+  const emailInput = useInput('', {
+    isEmpty: true,
+    minLengthError: 5,
+    isEmail: true,
+    isEmailRegistered: users,
+  });
+
+  const passwordInput = useInput('', {
+    isEmpty: true,
+  });
+
+  const onLoginChange = (e) => {
+    emailInput.onChange(e);
+  };
+
+  const onPasswordChange = (e) => {
+    passwordInput.onChange(e);
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
-
-    if (!loginEmail || !loginPassword) {
-      console.log('Meh, fill all fields');
-      return;
-    }
-
     const currentUser = users.find(
-      (user) => user.email === loginEmail && user.password === loginPassword
+      (user) =>
+        user.email === emailInput.value && user.password === passwordInput.value
     );
 
-    if (currentUser) {
-      dispatch(login({ currentUser, isLoggedIn: true }));
-      history.push('/');
-    } else {
-      console.log('Meh! Wrong data. Are you a hucker?');
+    dispatch(login({ currentUser, isLoggedIn: true }));
+    history.push('/');
+  };
+
+  const passwordCorrect = () => {
+    console.log(emailInput.isEmailRegistered);
+    if (emailInput.isEmailRegistered) {
+      return users.some((user) => {
+        return user.password === passwordInput.value;
+      });
     }
-    console.log(users);
   };
 
   return (
@@ -40,28 +56,48 @@ const LoginPage = () => {
       <Form onSubmit={handleLogin}>
         <Form.Group className='mb-3' controlId='formBasicEmail'>
           <Form.Label>Email address</Form.Label>
+          {emailInput.isFocused && emailInput.isEmpty && (
+            <div style={{ color: 'red' }}>{emailInput.errors.isEmptyError}</div>
+          )}
+          {emailInput.isFocused && !emailInput.isEmailRegistered && (
+            <div style={{ color: 'red' }}>
+              {emailInput.errors.isEmailRegisteredError}
+            </div>
+          )}
+
           <Form.Control
             type='email'
             placeholder='Enter email'
-            onChange={(e) => setLoginEmail(e.target.value)}
-            value={loginEmail}
+            onChange={onLoginChange}
+            onBlur={emailInput.onBlur}
+            value={emailInput.value}
           />
-          <Form.Text className='text-muted'>
-            We'll never share your email with anyone else.
-          </Form.Text>
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='formBasicPassword'>
           <Form.Label>Password</Form.Label>
+          {passwordInput.isFocused && passwordInput.isEmpty && (
+            <div style={{ color: 'red' }}>
+              {passwordInput.errors.isEmptyError}
+            </div>
+          )}
+          {passwordInput.isFocused && !passwordCorrect() && (
+            <div style={{ color: 'red' }}>Неверный пароль</div>
+          )}
           <Form.Control
             type='password'
             placeholder='Password'
-            onChange={(e) => setloginPassword(e.target.value)}
-            value={loginPassword}
+            onChange={onPasswordChange}
+            onBlur={passwordInput.onBlur}
+            value={passwordInput.value}
           />
         </Form.Group>
 
-        <Button variant='primary' type='submit'>
+        <Button
+          variant='primary'
+          type='submit'
+          disabled={!emailInput.isInputValid || !passwordCorrect()}
+        >
           Login
         </Button>
       </Form>

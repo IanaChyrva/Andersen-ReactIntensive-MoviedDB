@@ -5,6 +5,7 @@ export const useValidation = (value, validators) => {
   const [minLengthError, setMinLengthError] = useState(false);
   const [isEmail, setIsEmail] = useState(false);
   const [isInputValid, setIsInputValid] = useState(false);
+  const [isEmailRegistered, setIsEmailRegistered] = useState(false);
 
   useEffect(() => {
     for (const validator in validators) {
@@ -18,9 +19,13 @@ export const useValidation = (value, validators) => {
         case 'isEmail':
           const emailCheck =
             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
           setIsEmail(!emailCheck.test(String(value).toLowerCase()));
-
+          break;
+        case 'isEmailRegistered':
+          const emailExists = validators[validator].some(
+            (element) => value === element.email
+          );
+          setIsEmailRegistered(emailExists);
           break;
         default:
           break;
@@ -29,13 +34,14 @@ export const useValidation = (value, validators) => {
   }, [value, validators]);
 
   useEffect(() => {
-    setIsInputValid(isEmpty || minLengthError || isEmail);
-  }, [isEmpty, minLengthError, isEmail]);
+    setIsInputValid(isEmpty || minLengthError || isEmail || isEmailRegistered);
+  }, [isEmpty, minLengthError, isEmail, isInputValid, isEmailRegistered]);
 
   return {
     isEmpty,
     minLengthError,
     isEmail,
     isInputValid,
+    isEmailRegistered,
   };
 };
