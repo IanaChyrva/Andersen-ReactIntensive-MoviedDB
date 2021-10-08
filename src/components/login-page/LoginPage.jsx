@@ -93,11 +93,7 @@ const LoginPage = () => {
           />
         </Form.Group>
 
-        <Button
-          variant='primary'
-          type='submit'
-          disabled={!emailInput.isInputValid || !passwordCorrect()}
-        >
+        <Button variant='primary' type='submit' disabled={!passwordCorrect()}>
           Login
         </Button>
       </Form>
