@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Switch, Route, NavLink, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { signup } from '../../store/userAccountSlice';
+import { useInput } from '../../hooks/useInput';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -14,41 +15,55 @@ const RegistrationForm = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const [name, setName] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const name = useInput('');
+  const lastname = useInput('');
+  const email = useInput('', {
+    isEmpty: true,
+    minLengthError: 5,
+    isEmail: true,
+  });
+  const password = useInput('', {
+    isEmpty: true,
+    minLengthError: 5,
+  });
+
+  const onNameChange = (e) => {
+    name.onChange(e);
+  };
+
+  const onLastnameChange = (e) => {
+    lastname.onChange(e);
+  };
+
+  const onEmailChange = (e) => {
+    email.onChange(e);
+  };
+
+  const onPasswordChange = (e) => {
+    password.onChange(e);
+  };
 
   const onSignUp = (e) => {
     e.preventDefault();
 
-    if (!name || !lastname || !email || !password) {
-      console.log('Check for inputs fill');
-      return;
-    } else {
-      localStorage.setItem(
-        'sign-up-info',
-        JSON.stringify({ name, lastname, email, password })
-      );
-      dispatch(signup({ name, lastname, email, password }));
-      history.push('/login');
-    }
-  };
-
-  const onNameChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const onLastnameChange = (e) => {
-    setLastname(e.target.value);
-  };
-
-  const onEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const onPasswordChange = (e) => {
-    setPassword(e.target.value);
+    localStorage.setItem(
+      'sign-up-info',
+      JSON.stringify({
+        name: name.value,
+        lastname: lastname.value,
+        email: email.value,
+        password: password.value,
+      })
+    );
+    dispatch(
+      signup({
+        name: name.value,
+        lastname: lastname.value,
+        email: email.value,
+        password: password.value,
+      })
+    );
+    history.push('/login');
   };
 
   return (
@@ -57,66 +72,89 @@ const RegistrationForm = () => {
         <Form.Group className='mb-3'>
           <Row>
             <Col>
-              <Form.Label>Name</Form.Label>
+              <Form.Label>Имя</Form.Label>
               <Form.Control
-                placeholder='First name'
-                value={name}
+                placeholder='Имя'
+                value={name.value}
                 onChange={onNameChange}
               />
             </Col>
             <Col>
-              <Form.Label>Lastname</Form.Label>
+              <Form.Label>Фамилия</Form.Label>
               <Form.Control
-                placeholder='Last name'
+                placeholder='Фамилия'
+                value={lastname.value}
                 onChange={onLastnameChange}
-                value={lastname}
               />
             </Col>
           </Row>
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='formBasicEmail'>
-          <Form.Label>Email address</Form.Label>
+          <Form.Label>Email</Form.Label>
+          <div>
+            {email.isFocused && email.isEmpty && (
+              <div style={{ color: 'red' }}>{email.errors.isEmptyError}</div>
+            )}
+            {email.isFocused && email.minLengthError && (
+              <div style={{ color: 'red' }}>{email.errors.lengthError}</div>
+            )}
+            {email.isFocused && email.isEmail && (
+              <div style={{ color: 'red' }}>{email.errors.isEmailError}</div>
+            )}
+          </div>
           <Form.Control
+            name='email'
             type='email'
-            placeholder='Enter email'
+            placeholder='Email'
+            value={email.value}
+            onBlur={email.onBlur}
             onChange={onEmailChange}
-            value={email}
           />
-          <Form.Text className='text-muted'>
-            We'll never share your email with anyone else.
-          </Form.Text>
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='formBasicPassword'>
-          <Form.Label>Password</Form.Label>
+          <Form.Label>Пароль</Form.Label>
           <Form.Control
+            name='password'
             type='password'
-            placeholder='Password'
+            placeholder='Пароль'
+            onBlur={password.onBlur}
             onChange={onPasswordChange}
-            value={password}
+            value={password.value}
           />
+          <div>
+            {password.isFocused && password.isEmpty && (
+              <div style={{ color: 'red' }}>{password.errors.isEmptyError}</div>
+            )}
+            {password.isFocused && password.minLengthError && (
+              <div style={{ color: 'red' }}>{password.errors.lengthError}</div>
+            )}
+          </div>
         </Form.Group>
 
-        <Button variant='primary' type='submit'>
-          Sign Up
+        <Button
+          disabled={email.isInputValid || password.isInputValid}
+          variant='primary'
+          type='submit'
+        >
+          Зарегистрироваться
         </Button>
 
         <div>
           <Form.Text className='text-muted'>
-            <div>Registered alredy?</div>
+            <div>Уже есть учетная запись?</div>
             <div>
-              Go to the{' '}
+              Перeходи сюда{' '}
               {
                 <NavLink
                   to='/login'
                   className={styles.item}
                   activeClassName={styles.selected}
                 >
-                  Login
+                  Вход
                 </NavLink>
-              }{' '}
-              page
+              }
             </div>
             <Switch>
               <Route path='/login'>
