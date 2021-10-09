@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { emailCheckParameter } from '../constants';
 
 export const useValidation = (value, validators) => {
   const [isEmpty, setIsEmpty] = useState(true);
@@ -6,6 +7,23 @@ export const useValidation = (value, validators) => {
   const [isEmail, setIsEmail] = useState(false);
   const [isInputValid, setIsInputValid] = useState(false);
   const [isEmailRegistered, setIsEmailRegistered] = useState(false);
+  const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
+
+  const lengthError = minLengthError ? 'Некорректная длина' : null;
+  const isEmptyError = isEmpty ? 'Это поле обязательное для заполнения' : null;
+  const isEmailError = isEmail ? 'Неверный формат email' : null;
+  const isEmailRegisteredError = isEmailRegistered
+    ? null
+    : 'Пользователь с таким email не зарегистрирован';
+  const isPasswordCorrectError = isPasswordCorrect ? '' : 'Неверный пароль';
+
+  const errorMessages = {
+    lengthError,
+    isEmptyError,
+    isEmailError,
+    isEmailRegisteredError,
+    isPasswordCorrectError,
+  };
 
   useEffect(() => {
     for (const validator in validators) {
@@ -17,15 +35,21 @@ export const useValidation = (value, validators) => {
           setMinLengthError(value.length < validators[validator]);
           break;
         case 'isEmail':
-          const emailCheck =
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          setIsEmail(!emailCheck.test(String(value).toLowerCase()));
+          setIsEmail(!emailCheckParameter.test(String(value).toLowerCase()));
           break;
         case 'isEmailRegistered':
           const emailExists = validators[validator].some(
             (element) => value === element.email
           );
           setIsEmailRegistered(emailExists);
+          break;
+        case 'isPasswordCorrect':
+          if (validators[validator].dependancy) {
+            const isCorrect = validators[validator].usersArray.some(
+              (user) => user.password === value
+            );
+            setIsPasswordCorrect(isCorrect);
+          }
           break;
         default:
           break;
@@ -43,5 +67,7 @@ export const useValidation = (value, validators) => {
     isEmail,
     isInputValid,
     isEmailRegistered,
+    isPasswordCorrect,
+    errorMessages,
   };
 };

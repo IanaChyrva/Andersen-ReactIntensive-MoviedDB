@@ -3,6 +3,7 @@ import { Switch, Route, NavLink, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { signup } from '../../store/userAccountSlice';
 import { useInput } from '../../hooks/useInput';
+import { minInputLength } from '../../constants.js';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -19,12 +20,12 @@ const RegistrationForm = () => {
   const lastname = useInput('');
   const email = useInput('', {
     isEmpty: true,
-    minLengthError: 5,
+    minLengthError: minInputLength,
     isEmail: true,
   });
   const password = useInput('', {
     isEmpty: true,
-    minLengthError: 5,
+    minLengthError: minInputLength,
   });
 
   const onNameChange = (e) => {
@@ -92,43 +93,53 @@ const RegistrationForm = () => {
 
         <Form.Group className='mb-3' controlId='formBasicEmail'>
           <Form.Label>Email</Form.Label>
-          <div>
-            {email.isFocused && email.isEmpty && (
-              <div style={{ color: 'red' }}>{email.errors.isEmptyError}</div>
-            )}
-            {email.isFocused && email.minLengthError && (
-              <div style={{ color: 'red' }}>{email.errors.lengthError}</div>
-            )}
-            {email.isFocused && email.isEmail && (
-              <div style={{ color: 'red' }}>{email.errors.isEmailError}</div>
-            )}
-          </div>
+
           <Form.Control
-            name='email'
             type='email'
             placeholder='Email'
             value={email.value}
             onBlur={email.onBlur}
             onChange={onEmailChange}
           />
+          <div className={styles.errorBox}>
+            {email.isFocused && email.isEmpty && (
+              <div className={styles.error}>
+                {email.errorMessages.isEmptyError}
+              </div>
+            )}
+            {email.isFocused && email.minLengthError && (
+              <div className={styles.error}>
+                {email.errorMessages.lengthError}
+              </div>
+            )}
+            {email.isFocused && email.isEmail && (
+              <div className={styles.error}>
+                {email.errorMessages.isEmailError}
+              </div>
+            )}
+          </div>
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='formBasicPassword'>
           <Form.Label>Пароль</Form.Label>
+
           <Form.Control
-            name='password'
             type='password'
             placeholder='Пароль'
             onBlur={password.onBlur}
             onChange={onPasswordChange}
             value={password.value}
           />
-          <div>
+          <div className={styles.errorBox}>
             {password.isFocused && password.isEmpty && (
-              <div style={{ color: 'red' }}>{password.errors.isEmptyError}</div>
+              <div className={styles.error}>
+                {password.errorMessages.isEmptyError}
+              </div>
             )}
             {password.isFocused && password.minLengthError && (
-              <div style={{ color: 'red' }}>{password.errors.lengthError}</div>
+              <div className={styles.error}>
+                {password.errorMessages.lengthError}
+              </div>
             )}
           </div>
         </Form.Group>

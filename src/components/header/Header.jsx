@@ -8,8 +8,8 @@ import { logout } from '../../store/userAccountSlice';
 export default function Header() {
   const dispatch = useDispatch();
 
-  const isLoggedIn = useSelector((state) => state.users.isLoggedIn);
-  let currentUser = useSelector((state) => state.users.currentUser) || null;
+  const { isLoggedIn } = useSelector((state) => state.users);
+  let { currentUser } = useSelector((state) => state.users) || null;
 
   const handleLogout = () => {
     console.log('to remove');
@@ -30,11 +30,10 @@ export default function Header() {
       </div>
       <NavLink
         to='/favourite'
-        // className={`${styles.item} ${!isLoggedIn ? styles.hidden : ''}`}
         className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
         activeClassName={styles.selected}
       >
-        Favourite
+        Любимые фильмы
       </NavLink>
 
       <NavLink
@@ -42,21 +41,21 @@ export default function Header() {
         className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
         activeClassName={styles.selected}
       >
-        History
+        История
       </NavLink>
       <NavLink
         to='/sign-up'
         className={classnames(styles.item, { [styles.hidden]: isLoggedIn })}
         activeClassName={styles.selected}
       >
-        Sign-Up
+        Регистрация
       </NavLink>
       <NavLink
         to='/login'
         className={classnames(styles.item, { [styles.hidden]: isLoggedIn })}
         activeClassName={styles.selected}
       >
-        Login
+        Вход
       </NavLink>
       <div
         className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
@@ -69,7 +68,7 @@ export default function Header() {
         activeClassName={styles.selected}
         onClick={handleLogout}
       >
-        Logout
+        Выход
       </NavLink>
     </header>
   );

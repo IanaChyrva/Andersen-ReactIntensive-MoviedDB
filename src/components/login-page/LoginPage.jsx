@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { login } from '../../store/userAccountSlice';
 import { useInput } from '../../hooks/useInput';
+import { minInputLength } from '../../constants.js';
+import styles from './Login.module.css';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -14,13 +16,17 @@ const LoginPage = () => {
 
   const emailInput = useInput('', {
     isEmpty: true,
-    minLengthError: 5,
+    minLengthError: minInputLength,
     isEmail: true,
     isEmailRegistered: users,
   });
 
   const passwordInput = useInput('', {
     isEmpty: true,
+    isPasswordCorrect: {
+      dependancy: emailInput.isEmailRegistered,
+      usersArray: users,
+    },
   });
 
   const onLoginChange = (e) => {
@@ -42,59 +48,61 @@ const LoginPage = () => {
     history.push('/');
   };
 
-  const passwordCorrect = () => {
-    console.log(emailInput.isEmailRegistered);
-    if (emailInput.isEmailRegistered) {
-      return users.some((user) => {
-        return user.password === passwordInput.value;
-      });
-    }
-  };
-
   return (
     <div>
       <Form onSubmit={handleLogin}>
         <Form.Group className='mb-3' controlId='formBasicEmail'>
-          <Form.Label>Email address</Form.Label>
-          {emailInput.isFocused && emailInput.isEmpty && (
-            <div style={{ color: 'red' }}>{emailInput.errors.isEmptyError}</div>
-          )}
-          {emailInput.isFocused && !emailInput.isEmailRegistered && (
-            <div style={{ color: 'red' }}>
-              {emailInput.errors.isEmailRegisteredError}
-            </div>
-          )}
-
+          <Form.Label>Email</Form.Label>
           <Form.Control
+            style={{ width: '400px' }}
             type='email'
-            placeholder='Enter email'
+            placeholder='Email'
             onChange={onLoginChange}
             onBlur={emailInput.onBlur}
             value={emailInput.value}
           />
+          <div className={styles.errorBox}>
+            {emailInput.isFocused && emailInput.isEmpty && (
+              <div className={styles.error}>
+                {emailInput.errorMessages.isEmptyError}
+              </div>
+            )}
+            {emailInput.isFocused && !emailInput.isEmailRegistered && (
+              <div className={styles.error}>
+                {emailInput.errorMessages.isEmailRegisteredError}
+              </div>
+            )}
+          </div>
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='formBasicPassword'>
-          <Form.Label>Password</Form.Label>
-          {passwordInput.isFocused && passwordInput.isEmpty && (
-            <div style={{ color: 'red' }}>
-              {passwordInput.errors.isEmptyError}
-            </div>
-          )}
-          {passwordInput.isFocused && !passwordCorrect() && (
-            <div style={{ color: 'red' }}>Неверный пароль</div>
-          )}
+          <Form.Label>Пароль</Form.Label>
+
           <Form.Control
             type='password'
-            placeholder='Password'
+            placeholder='Пароль'
             onChange={onPasswordChange}
             onBlur={passwordInput.onBlur}
             value={passwordInput.value}
           />
+          <div className={styles.errorBox}>
+            {passwordInput.isFocused && passwordInput.isEmpty && (
+              <div className={styles.error}>
+                {passwordInput.errorMessages.isEmptyError}
+              </div>
+            )}
+            {passwordInput.isFocused && !passwordInput.isPasswordCorrect && (
+              <div className={styles.error}>Неверный пароль</div>
+            )}
+          </div>
         </Form.Group>
 
-        <Button variant='primary' type='submit' disabled={!passwordCorrect()}>
-          Login
+        <Button
+          variant='primary'
+          type='submit'
+          disabled={!passwordInput.isPasswordCorrect}
+        >
+          Вход
         </Button>
       </Form>
     </div>
