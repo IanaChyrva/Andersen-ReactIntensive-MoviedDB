@@ -3,18 +3,20 @@ import { useSelector, useDispatch } from 'react-redux'
 import { MovieItem } from '../movie-item/MovieItem'
 import { useEffect } from 'react'
 import { fetchMovies } from '../../store/moviesSlice'
+// import { SearchForm } from '../search-panel/SearchForm'
 import imageNotFound from '../../assets/images/nothing-icon.jpg'
 import './moviesList.css'
 
 ;
 export const MoviesList = () => {
-    const parsedUrl = new URL(window.location.href);
-    const text = parsedUrl.searchParams.get("text");
+    
     const {movies, status} = useSelector(state => state.movies)
     const dispatch = useDispatch()
+    const parsedUrl = new URL(window.location.href);
+    const text = parsedUrl.searchParams.get("text");
     useEffect(() => {
-        dispatch(fetchMovies(text)) 
-    }, [text])
+        dispatch(fetchMovies(text))
+    }, [dispatch, text])
 
     const MoviesBlock = () => {
         return (
@@ -33,8 +35,9 @@ export const MoviesList = () => {
     }
     const content = status === 'rejected' ? < MovieNotFound/> : <MoviesBlock/>
     return(
-        <>
-            {content}
+        <>  
+        {/* <SearchForm/> */}
+        {content}
         </>   
     )
 }

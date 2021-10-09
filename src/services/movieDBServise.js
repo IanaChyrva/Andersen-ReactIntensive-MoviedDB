@@ -10,7 +10,7 @@
     }
 }
 
-   const getResource = async (url) => {
+  export const getResource = async (url) => {
     let res = await fetch(url);
 
     if (!res.ok) {

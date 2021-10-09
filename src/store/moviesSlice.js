@@ -15,6 +15,7 @@ export const fetchMovies = createAsyncThunk(
   }
 )
 const initialState = {
+        text:'',
         movies: [],
         movie: [],
         status: '',
@@ -46,7 +47,7 @@ const moviesSlice = createSlice({
      }
 }) 
 
-export const { loadMovies } = moviesSlice.actions
+export const { loadMovies, getMovies } = moviesSlice.actions
 export const moviesReducer = moviesSlice.reducer
 
    
