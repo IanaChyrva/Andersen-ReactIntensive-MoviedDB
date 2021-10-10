@@ -8,8 +8,9 @@ import { logout } from '../../store/userAccountSlice';
 export default function Header() {
   const dispatch = useDispatch();
 
-  const { isLoggedIn } = useSelector((state) => state.users);
-  let { currentUser } = useSelector((state) => state.users) || null;
+  const isLoggedIn = useSelector((state) => state.users.isLoggedIn);
+  let currentUser = useSelector((state) => state.users.currentUser);
+  console.log('currentUser', currentUser);
 
   const handleLogout = () => {
     console.log('to remove');

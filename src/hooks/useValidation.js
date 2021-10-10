@@ -6,13 +6,13 @@ export const useValidation = (value, validators) => {
   const [minLengthError, setMinLengthError] = useState(false);
   const [isEmail, setIsEmail] = useState(false);
   const [isInputValid, setIsInputValid] = useState(false);
-  const [isEmailRegistered, setIsEmailRegistered] = useState(false);
+  const [emailsRegistered, setIsEmailRegistered] = useState(false);
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
 
   const lengthError = minLengthError ? 'Некорректная длина' : null;
   const isEmptyError = isEmpty ? 'Это поле обязательное для заполнения' : null;
   const isEmailError = isEmail ? 'Неверный формат email' : null;
-  const isEmailRegisteredError = isEmailRegistered
+  const isEmailRegisteredError = emailsRegistered
     ? null
     : 'Пользователь с таким email не зарегистрирован';
   const isPasswordCorrectError = isPasswordCorrect ? '' : 'Неверный пароль';
@@ -37,7 +37,7 @@ export const useValidation = (value, validators) => {
         case 'isEmail':
           setIsEmail(!emailCheckParameter.test(String(value).toLowerCase()));
           break;
-        case 'isEmailRegistered':
+        case 'emailsRegistered':
           const emailExists = validators[validator].some(
             (element) => value === element.email
           );
@@ -58,15 +58,15 @@ export const useValidation = (value, validators) => {
   }, [value, validators]);
 
   useEffect(() => {
-    setIsInputValid(isEmpty || minLengthError || isEmail || isEmailRegistered);
-  }, [isEmpty, minLengthError, isEmail, isInputValid, isEmailRegistered]);
+    setIsInputValid(isEmpty || minLengthError || isEmail || emailsRegistered);
+  }, [isEmpty, minLengthError, isEmail, isInputValid, emailsRegistered]);
 
   return {
     isEmpty,
     minLengthError,
     isEmail,
     isInputValid,
-    isEmailRegistered,
+    emailsRegistered,
     isPasswordCorrect,
     errorMessages,
   };

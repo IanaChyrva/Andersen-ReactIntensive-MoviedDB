@@ -4,7 +4,7 @@ import { useValidation } from './useValidation';
 export const useInput = (initialValue, validators) => {
   const [value, setValue] = useState(initialValue);
   const [isFocused, setIsFocused] = useState(false);
-  const isValid = useValidation(value, validators);
+  const validation = useValidation(value, validators);
 
   const onChange = (e) => {
     setValue(e.target.value.trim());
@@ -19,6 +19,6 @@ export const useInput = (initialValue, validators) => {
     onChange,
     isFocused,
     onBlur,
-    ...isValid,
+    ...validation,
   };
 };

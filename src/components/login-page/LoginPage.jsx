@@ -18,13 +18,13 @@ const LoginPage = () => {
     isEmpty: true,
     minLengthError: minInputLength,
     isEmail: true,
-    isEmailRegistered: users,
+    emailsRegistered: users,
   });
 
   const passwordInput = useInput('', {
     isEmpty: true,
     isPasswordCorrect: {
-      dependancy: emailInput.isEmailRegistered,
+      dependancy: emailInput.emailsRegistered,
       usersArray: users,
     },
   });
@@ -67,7 +67,7 @@ const LoginPage = () => {
                 {emailInput.errorMessages.isEmptyError}
               </div>
             )}
-            {emailInput.isFocused && !emailInput.isEmailRegistered && (
+            {emailInput.isFocused && !emailInput.emailsRegistered && (
               <div className={styles.error}>
                 {emailInput.errorMessages.isEmailRegisteredError}
               </div>
