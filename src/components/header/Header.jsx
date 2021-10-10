@@ -1,10 +1,25 @@
 import React from 'react';
+import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import styles from './Header.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../store/userAccountSlice';
 
 export default function Header() {
+  const dispatch = useDispatch();
+
+  const isLoggedIn = useSelector((state) => state.users.isLoggedIn);
+  let currentUser = useSelector((state) => state.users.currentUser);
+  console.log('currentUser', currentUser);
+
+  const handleLogout = () => {
+    console.log('to remove');
+    dispatch(logout());
+  };
+
   return (
     <header className={styles.header}>
+      {console.log('isLoggedIn', isLoggedIn)}
       <div className={styles.logoContainer}>
         <NavLink
           to='/'
@@ -16,40 +31,45 @@ export default function Header() {
       </div>
       <NavLink
         to='/favourite'
-        className={styles.item}
+        className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
         activeClassName={styles.selected}
       >
-        Favourite
+        Любимые фильмы
       </NavLink>
 
       <NavLink
         to='/history'
-        className={styles.item}
+        className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
         activeClassName={styles.selected}
       >
-        History
+        История
       </NavLink>
       <NavLink
         to='/sign-up'
-        className={styles.item}
+        className={classnames(styles.item, { [styles.hidden]: isLoggedIn })}
         activeClassName={styles.selected}
       >
-        Sign-Up
+        Регистрация
       </NavLink>
       <NavLink
         to='/login'
-        className={styles.item}
+        className={classnames(styles.item, { [styles.hidden]: isLoggedIn })}
         activeClassName={styles.selected}
       >
-        Login
+        Вход
       </NavLink>
-      <div>Username</div>
-      <NavLink
-        to='/logout'
-        className={styles.item}
-        activeClassName={styles.selected}
+      <div
+        className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
       >
-        Logout
+        {currentUser ? `${currentUser.name} ${currentUser.lastname}` : ''}
+      </div>
+      <NavLink
+        to='/login'
+        className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
+        activeClassName={styles.selected}
+        onClick={handleLogout}
+      >
+        Выход
       </NavLink>
     </header>
   );

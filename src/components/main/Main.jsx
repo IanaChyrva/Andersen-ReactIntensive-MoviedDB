@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+
 import Favourite from '../favourite/Favourite';
 import History from '../history/History';
 import LoginPage from '../login-page/LoginPage';
@@ -37,8 +38,8 @@ const Main = () => {
         </Route>
         <Route path='/search'>
           <div>
-          <SearchForm/>
-          <MoviesList />
+            <SearchForm />
+            <MoviesList />
           </div>
         </Route>
         <Route path='/movie/:id' component={MovieDetails}/>

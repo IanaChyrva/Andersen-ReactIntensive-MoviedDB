@@ -1,5 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Switch, Route, NavLink } from 'react-router-dom';
+import React from 'react';
+import { Switch, Route, NavLink, useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { signup } from '../../store/userAccountSlice';
+import { useInput } from '../../hooks/useInput';
+import { minInputLength } from '../../constants.js';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -8,55 +12,59 @@ import Col from 'react-bootstrap/Col';
 import styles from './RegistrationForm.module.css';
 import LoginPage from '../login-page/LoginPage';
 
-const getUserData = () => {
-  const storeData = localStorage.getItem('sign - up - info');
-  if (!storeData) {
-    return {
-      initName: '',
-      initLastname: '',
-      initEmail: '',
-      initPassword: '',
-    };
-  }
-  return JSON.stringify(storeData);
-};
-
 const RegistrationForm = () => {
-  const { initName, initLastname, initEmail, initPassword } = getUserData();
+  const history = useHistory();
+  const dispatch = useDispatch();
 
-  const [name, setName] = useState(initName);
-  const [lastname, setLastname] = useState(initLastname);
-  const [email, setEmail] = useState(initEmail);
-  const [password, setPassword] = useState(initPassword);
+  const name = useInput('');
+  const lastname = useInput('');
+  const email = useInput('', {
+    isEmpty: true,
+    minLengthError: minInputLength,
+    isEmail: true,
+  });
+  const password = useInput('', {
+    isEmpty: true,
+    minLengthError: minInputLength,
+  });
+
+  const onNameChange = (e) => {
+    name.onChange(e);
+  };
+
+  const onLastnameChange = (e) => {
+    lastname.onChange(e);
+  };
+
+  const onEmailChange = (e) => {
+    email.onChange(e);
+  };
+
+  const onPasswordChange = (e) => {
+    password.onChange(e);
+  };
 
   const onSignUp = (e) => {
     e.preventDefault();
 
-    if (!name || !lastname || !email || !password) {
-      console.log('Check for inputs fill');
-      return;
-    } else {
-      localStorage.setItem(
-        'sign-up-info',
-        JSON.stringify({ name, lastname, email, password })
-      );
-    }
-  };
-
-  const onNameChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const onLastnameChange = (e) => {
-    setLastname(e.target.value);
-  };
-
-  const onEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const onPasswordChange = (e) => {
-    setPassword(e.target.value);
+    localStorage.setItem(
+      'sign-up-info',
+      JSON.stringify({
+        name: name.value,
+        lastname: lastname.value,
+        email: email.value,
+        password: password.value,
+      })
+    );
+    dispatch(
+      signup({
+        name: name.value,
+        lastname: lastname.value,
+        email: email.value,
+        password: password.value,
+      })
+    );
+    history.push('/login');
   };
 
   return (
@@ -65,66 +73,99 @@ const RegistrationForm = () => {
         <Form.Group className='mb-3'>
           <Row>
             <Col>
-              <Form.Label>Name</Form.Label>
+              <Form.Label>Имя</Form.Label>
               <Form.Control
-                placeholder='First name'
-                value={name}
+                placeholder='Имя'
+                value={name.value}
                 onChange={onNameChange}
               />
             </Col>
             <Col>
-              <Form.Label>Lastname</Form.Label>
+              <Form.Label>Фамилия</Form.Label>
               <Form.Control
-                placeholder='Last name'
+                placeholder='Фамилия'
+                value={lastname.value}
                 onChange={onLastnameChange}
-                value={lastname}
               />
             </Col>
           </Row>
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='formBasicEmail'>
-          <Form.Label>Email address</Form.Label>
+          <Form.Label>Email</Form.Label>
+
           <Form.Control
             type='email'
-            placeholder='Enter email'
+            placeholder='Email'
+            value={email.value}
+            onBlur={email.onBlur}
             onChange={onEmailChange}
-            value={email}
           />
-          <Form.Text className='text-muted'>
-            We'll never share your email with anyone else.
-          </Form.Text>
+          <div className={styles.errorBox}>
+            {email.isFocused && email.isEmpty && (
+              <div className={styles.error}>
+                {email.errorMessages.isEmptyError}
+              </div>
+            )}
+            {email.isFocused && email.minLengthError && (
+              <div className={styles.error}>
+                {email.errorMessages.lengthError}
+              </div>
+            )}
+            {email.isFocused && email.isEmail && (
+              <div className={styles.error}>
+                {email.errorMessages.isEmailError}
+              </div>
+            )}
+          </div>
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='formBasicPassword'>
-          <Form.Label>Password</Form.Label>
+          <Form.Label>Пароль</Form.Label>
+
           <Form.Control
             type='password'
-            placeholder='Password'
+            placeholder='Пароль'
+            onBlur={password.onBlur}
             onChange={onPasswordChange}
-            value={password}
+            value={password.value}
           />
+          <div className={styles.errorBox}>
+            {password.isFocused && password.isEmpty && (
+              <div className={styles.error}>
+                {password.errorMessages.isEmptyError}
+              </div>
+            )}
+            {password.isFocused && password.minLengthError && (
+              <div className={styles.error}>
+                {password.errorMessages.lengthError}
+              </div>
+            )}
+          </div>
         </Form.Group>
 
-        <Button variant='primary' type='submit'>
-          Sign Up
+        <Button
+          disabled={email.isInputValid || password.isInputValid}
+          variant='primary'
+          type='submit'
+        >
+          Зарегистрироваться
         </Button>
 
         <div>
           <Form.Text className='text-muted'>
-            <div>Registered alredy?</div>
+            <div>Уже есть учетная запись?</div>
             <div>
-              Go to the{' '}
+              Перeходи сюда{' '}
               {
                 <NavLink
                   to='/login'
                   className={styles.item}
                   activeClassName={styles.selected}
                 >
-                  Login
+                  Вход
                 </NavLink>
-              }{' '}
-              page
+              }
             </div>
             <Switch>
               <Route path='/login'>
@@ -137,11 +178,5 @@ const RegistrationForm = () => {
     </div>
   );
 };
-
-// ToDo
-// To add authentication redirection to login page
-// Add verification for form
-// Add visual message to user, if something is missing and data is wrong
-// Add styling for navigation (hide or show depending on user login info)
 
 export default RegistrationForm;

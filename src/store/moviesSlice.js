@@ -3,14 +3,13 @@ import {getMovieByName, getMovieDetails} from '../services/movieDBServise'
 
 export const fetchMovies = createAsyncThunk(
   'movies/fetchMovies',
-  async function(text, {rejectWithValue}) {
+  async function (text, { rejectWithValue }) {
     try {
       const response = await getMovieByName(text);
-      console.log(response)
-      return response
-    }
-    catch (error) {
-      return rejectWithValue(error.message)
+      console.log(response);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
   }
 )
@@ -63,5 +62,5 @@ const moviesSlice = createSlice({
 export const { cleanMovies, cleanMovieDetails } = moviesSlice.actions
 export const moviesReducer = moviesSlice.reducer
 
-   
-      
+// export const { loadMovies } = moviesSlice.actions;
+// export const moviesReducer = moviesSlice.reducer;
