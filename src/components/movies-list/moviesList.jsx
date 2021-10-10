@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { MovieItem } from '../movie-item/MovieItem';
 import imageNotFound from '../../assets/images/nothing-icon.jpg';
 import './moviesList.css';
+import * as _ from 'lodash';
 
 export const MoviesList = () => {
   const { movies, status } = useSelector((state) => state.movies);
@@ -10,7 +11,6 @@ export const MoviesList = () => {
   const MoviesBlock = () => {
     const isLoggedIn = useSelector((state) => state.users.isLoggedIn);
     const { movies, status } = useSelector((state) => state.movies);
-    console.log(movies);
 
     return (
       <div className='moviesList'>

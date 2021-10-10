@@ -39,15 +39,17 @@ const userAccountSlice = createSlice({
       if (action.payload.isBookmarked) {
         state.currentUser.favouriteMovies = [
           ...state.currentUser.favouriteMovies,
-          action.payload.movieData,
+          {
+            movieData: action.payload.movieData,
+            isBookmarked: action.payload.isBookmarked,
+          },
         ];
       }
       if (!action.payload.isBookmarked) {
-        state.currentUser.favouriteMovies = [
-          ...state.currentUser.favouriteMovies,
-        ].filter((movie) => {
-          return movie.title !== action.payload.movieData.title;
-        });
+        state.currentUser.favouriteMovies =
+          state.currentUser.favouriteMovies.filter((movie) => {
+            return movie.movieData.title !== action.payload.movieData.title;
+          });
       }
     },
   },

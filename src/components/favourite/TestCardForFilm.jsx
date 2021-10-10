@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { toggleFavourite } from '../../store/userAccountSlice';
-import './movieItem.css';
 import classnames from 'classnames';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleFavourite } from '../../store/userAccountSlice';
 import { FaBookmark } from 'react-icons/fa';
 import { FaRegBookmark } from 'react-icons/fa';
 
-export const MovieItem = (props) => {
-  const { title, year, posterUrl } = props.movie;
-  const [isBookmarked, setIsBookmarked] = useState(false);
+const TestCardForFilm = ({ movie, isMovieBookmarked, isLoggedIn }) => {
+  const { title, year, posterUrl } = movie;
+  const [isBookmarked, setIsBookmarked] = useState(isMovieBookmarked);
   const dispatch = useDispatch();
 
   const handleToggleBookmark = () => {
@@ -41,7 +40,7 @@ export const MovieItem = (props) => {
           </div>
           <div
             className={classnames('bookmark toggledOff', {
-              hidden: !props.isLoggedIn,
+              hidden: !isLoggedIn,
             })}
             onClick={handleToggleBookmark}
           >
@@ -52,3 +51,5 @@ export const MovieItem = (props) => {
     </div>
   );
 };
+
+export default TestCardForFilm;
