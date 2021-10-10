@@ -34,9 +34,25 @@ const userAccountSlice = createSlice({
     startApp: (state) => {
       state.startApp = true;
     },
+
+    toggleFavourite: (state, action) => {
+      if (action.payload.isBookmarked) {
+        state.currentUser.favouriteMovies = [
+          ...state.currentUser.favouriteMovies,
+          action.payload.movieData,
+        ];
+      }
+      if (!action.payload.isBookmarked) {
+        state.currentUser.favouriteMovies = [
+          ...state.currentUser.favouriteMovies,
+        ].filter((movie) => {
+          return movie.title !== action.payload.movieData.title;
+        });
+      }
+    },
   },
 });
 
 export const userAccountReducer = userAccountSlice.reducer;
-export const { signup, login, logout, getUsers, startApp } =
+export const { signup, login, logout, getUsers, startApp, toggleFavourite } =
   userAccountSlice.actions;

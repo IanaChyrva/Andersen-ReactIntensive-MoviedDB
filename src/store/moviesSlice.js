@@ -6,7 +6,7 @@ export const fetchMovies = createAsyncThunk(
   async function (text, { rejectWithValue }) {
     try {
       const response = await getMovieByName(text);
-      console.log(response);
+
       return response;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -26,7 +26,6 @@ const moviesSlice = createSlice({
   reducers: {
     loadMovies(state, action) {
       state.movies = action.payload;
-      console.log(state.movies);
     },
   },
   extraReducers: {

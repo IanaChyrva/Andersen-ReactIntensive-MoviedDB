@@ -58,10 +58,13 @@ const RegistrationForm = () => {
     );
     dispatch(
       signup({
-        name: name.value,
-        lastname: lastname.value,
-        email: email.value,
-        password: password.value,
+        userInfo: {
+          name: name.value,
+          lastname: lastname.value,
+          email: email.value,
+          password: password.value,
+        },
+        favouriteMovies: [],
       })
     );
     history.push('/login');
