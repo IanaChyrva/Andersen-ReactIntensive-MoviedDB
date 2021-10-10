@@ -1,37 +1,44 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import {getMovieByName} from '../services/movieDBServise'
+import {getMovieByName, getMovieDetails} from '../services/movieDBServise'
 
 export const fetchMovies = createAsyncThunk(
   'movies/fetchMovies',
   async function(text, {rejectWithValue}) {
     try {
       const response = await getMovieByName(text);
-      return response.Search
+      console.log(response)
+      return response
     }
     catch (error) {
       return rejectWithValue(error.message)
     }
   }
 )
+
+export const fetchMovieDetails = createAsyncThunk(
+  'movies/fetchMovieDetails',
+  async function(id) {
+    const response = await getMovieDetails(id)
+    console.log(response)
+    return response
+  }
+)
 const initialState = {
-        text: '',
         movies: [],
-        movie: [],
+        movieDetails: [],
         status: '',
         error: null
       };
 
-const searchSlice = createSlice({
+const moviesSlice = createSlice({
     name: 'movies',
     initialState,
     reducers: {
-      searchMovie(state, action) {
-          console.log(state)
-          console.log(action)
-        state.text = action.payload
+      cleanMovies(state) {
+        state.movies = []
       },
-      loadMovies(state, action) {
-        state.movies = action.payload
+      cleanMovieDetails(state) {
+        state.movieDetails = []
       }
     },
     extraReducers: {
@@ -46,12 +53,15 @@ const searchSlice = createSlice({
       [fetchMovies.rejected] : (state, action) => {
         state.status = 'rejected';
         state.error = action.payload
-      }
-     }
+      },
+      [fetchMovieDetails.fulfilled] : (state, action) => {
+        state.movieDetails = action.payload
+      },
+     },
 }) 
 
-export const { searchMovie, loadMovies } = searchSlice.actions
-export const searchReducer = searchSlice.reducer
+export const { cleanMovies, cleanMovieDetails } = moviesSlice.actions
+export const moviesReducer = moviesSlice.reducer
 
    
       
