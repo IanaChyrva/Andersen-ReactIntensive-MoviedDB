@@ -1,12 +1,26 @@
 
    const _apiBase = 'http://www.omdbapi.com/?apikey=';
    const _apiKey = 'a445a5cd';
-   const _transformMovie = (movie) => {
+   const _transformMovies = (movie) => {
     return {
         title: movie.Title,
         year: movie.Year,
         posterUrl : movie.Poster,
-        type: movie.Type
+        type: movie.Type,
+        imdbId: movie.imdbID
+    }
+   }
+   const _transformMovie = (movie) => {
+    return {
+        title: movie.Title,
+        genre: movie.Genre,
+        country: movie.Country,
+        posterUrl : movie.Poster,
+        type: movie.Type,
+        imdbId: movie.imdbId,
+        released: movie.released,
+        director: movie.Director,
+        plot: movie.Plot
     }
 }
 
@@ -25,5 +39,13 @@
 
 export const getMovieByName = async (name) => {
     const res = await getResource(`${_apiBase}${_apiKey}&s=${name}`);
-    return res.Search.map(_transformMovie)
+    return res.Search.map(_transformMovies)
     }
+
+export const getMovieDetails = async (id) => {
+    const res = await getResource(`${_apiBase}${_apiKey}&i=${id}`);
+    console.log(res)
+    return  _transformMovie(res)
+   
+    }    
+

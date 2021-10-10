@@ -1,8 +1,9 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import './movieItem.css'
 
 export const MovieItem = (props) => {
-    const {title, year, posterUrl} = props.movie
+    const {title, year, posterUrl, imdbId} = props.movie
     return (
       <div className="card movieCard">
       <img src={posterUrl} className="card-img-top movieCard_img"alt="постер"/>
@@ -10,7 +11,7 @@ export const MovieItem = (props) => {
         <h5 className="card-title">{title}</h5>
         <p className="card-text yearInfo">{year}</p>
         <div className='detailsLink'>
-          <a href="#">Подробнее</a>
+          <Link to={`/movie/${imdbId}`}>Подробнее</Link>
         </div>
       </div>
       </div>
