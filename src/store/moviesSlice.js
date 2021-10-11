@@ -6,7 +6,6 @@ export const fetchMovies = createAsyncThunk(
   async function (text, { rejectWithValue }) {
     try {
       const response = await getMovieByName(text);
-
       return response;
     } catch (error) {
       return rejectWithValue(error.message);

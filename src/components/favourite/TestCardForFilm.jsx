@@ -6,7 +6,7 @@ import { FaBookmark } from 'react-icons/fa';
 import { FaRegBookmark } from 'react-icons/fa';
 
 const TestCardForFilm = ({ movie, isMovieBookmarked, isLoggedIn }) => {
-  const { title, year, posterUrl } = movie;
+  const { title, year, posterUrl, id } = movie;
   const [isBookmarked, setIsBookmarked] = useState(isMovieBookmarked);
   const dispatch = useDispatch();
 
@@ -18,6 +18,7 @@ const TestCardForFilm = ({ movie, isMovieBookmarked, isLoggedIn }) => {
           title,
           year,
           posterUrl,
+          id,
         },
         isBookmarked: !isBookmarked,
       })

@@ -7,7 +7,7 @@ import { FaBookmark } from 'react-icons/fa';
 import { FaRegBookmark } from 'react-icons/fa';
 
 export const MovieItem = (props) => {
-  const { title, year, posterUrl } = props.movie;
+  const { title, year, posterUrl, id } = props.movie;
   const [isBookmarked, setIsBookmarked] = useState(false);
   const dispatch = useDispatch();
 
@@ -19,6 +19,7 @@ export const MovieItem = (props) => {
           title,
           year,
           posterUrl,
+          id,
         },
         isBookmarked: !isBookmarked,
       })

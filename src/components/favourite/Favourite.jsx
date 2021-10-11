@@ -12,14 +12,17 @@ const Favourite = () => {
     <div>
       <div>Favourite</div>
       <div className='moviesList'>
-        {savedMovies.map((movie, index) => (
-          <TestCardForFilm
-            key={index}
-            movie={movie.movieData}
-            isLoggedIn={isLoggedIn}
-            isMovieBookmarked={movie.isBookmarked}
-          />
-        ))}
+        {savedMovies.map((movie) => {
+          return (
+            <div key={movie.movieData.id}>
+              <TestCardForFilm
+                movie={movie.movieData}
+                isLoggedIn={isLoggedIn}
+                isMovieBookmarked={movie.isBookmarked}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

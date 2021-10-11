@@ -14,9 +14,11 @@ export const MoviesList = () => {
 
     return (
       <div className='moviesList'>
-        {movies.map((item, index) => (
-          <MovieItem key={index} movie={item} isLoggedIn={isLoggedIn} />
-        ))}
+        {movies.map((item) => {
+          return (
+            <MovieItem key={item.id} movie={item} isLoggedIn={isLoggedIn} />
+          );
+        })}
       </div>
     );
   };
