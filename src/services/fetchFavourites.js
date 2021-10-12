@@ -11,6 +11,7 @@ export const fetchFavourites = (setFunction, ids) => {
         imdbId: res.data.imdbID,
         year: res.data.Year,
         posterUrl: res.data.Poster,
+        isMovieBookmarked: true,
       };
     });
 

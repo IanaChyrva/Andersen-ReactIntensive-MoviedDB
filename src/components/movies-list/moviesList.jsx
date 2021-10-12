@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { MovieItem } from '../movie-item/MovieItem';
-import { useEffect } from 'react';
 import { fetchMovies, cleanMovies } from '../../store/moviesSlice';
 import imageNotFound from '../../assets/images/nothing-icon.jpg';
 import './moviesList.css';
@@ -21,11 +20,20 @@ export const MoviesList = () => {
 
   const MoviesBlock = () => {
     const isLoggedIn = useSelector((state) => state.users.isLoggedIn);
-    const { movies, status } = useSelector((state) => state.movies);
+    const users = useSelector((state) => state.users);
+
+    const moviesArray = !isLoggedIn
+      ? [...movies]
+      : movies.map((movie) => ({
+          ...movie,
+          isMovieBookmarked: users.currentUser.favouriteMovies.includes(
+            movie.imdbId
+          ),
+        }));
 
     return (
       <div className='moviesList'>
-        {movies.map((item) => {
+        {moviesArray.map((item) => {
           return (
             <MovieItem key={item.imdbId} movie={item} isLoggedIn={isLoggedIn} />
           );
