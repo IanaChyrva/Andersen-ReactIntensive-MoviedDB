@@ -10,7 +10,6 @@ export default function Header() {
 
   const isLoggedIn = useSelector((state) => state.users.isLoggedIn);
   let currentUser = useSelector((state) => state.users.currentUser);
-  console.log('currentUser', currentUser);
 
   const handleLogout = () => {
     console.log('to remove');
@@ -19,7 +18,6 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      {console.log('isLoggedIn', isLoggedIn)}
       <div className={styles.logoContainer}>
         <NavLink
           to='/'
@@ -61,7 +59,9 @@ export default function Header() {
       <div
         className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
       >
-        {currentUser ? `${currentUser.name} ${currentUser.lastname}` : ''}
+        {currentUser
+          ? `${currentUser.userInfo.name} ${currentUser.userInfo.lastname}`
+          : ''}
       </div>
       <NavLink
         to='/login'

@@ -39,10 +39,12 @@ const LoginPage = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    const currentUser = users.find(
-      (user) =>
-        user.email === emailInput.value && user.password === passwordInput.value
-    );
+    const currentUser = users.find((user) => {
+      return (
+        user.userInfo.email === emailInput.value &&
+        user.userInfo.password === passwordInput.value
+      );
+    });
 
     dispatch(login({ currentUser, isLoggedIn: true }));
     history.push('/');
