@@ -1,4 +1,11 @@
-import { signup, login, logout, getUsers, startApp } from '../userAccountSlice';
+import {
+  signup,
+  login,
+  logout,
+  getUsers,
+  startApp,
+  toggleFavourite,
+} from '../userAccountSlice';
 
 export const userAccoutMiddleware = (store) => (next) => (action) => {
   next(action);
@@ -15,9 +22,6 @@ export const userAccoutMiddleware = (store) => (next) => (action) => {
         currentUser: JSON.parse(currentUser),
       })
     );
-
-    console.log('currentUser', JSON.parse(currentUser));
-    console.log(store.getState().users);
   }
 
   if (signup.match(action)) {
@@ -26,15 +30,44 @@ export const userAccoutMiddleware = (store) => (next) => (action) => {
   }
 
   if (login.match(action)) {
-    console.log('login');
     const currentUser = store.getState().users.currentUser;
     localStorage.setItem('current-user', JSON.stringify(currentUser));
     localStorage.setItem('isLoggedIn', JSON.stringify(true));
   }
 
   if (logout.match(action)) {
-    console.log('logout');
     localStorage.setItem('isLoggedIn', JSON.stringify(false));
     localStorage.removeItem('current-user');
+  }
+
+  if (toggleFavourite.match(action)) {
+    const users = JSON.parse(localStorage.getItem('sign-up-info'));
+    const { currentUser } = store.getState().users;
+    const userIndex = users.findIndex((user) => {
+      return (
+        user.userInfo.email === currentUser.userInfo.email &&
+        user.userInfo.password === currentUser.userInfo.password
+      );
+    });
+
+    if (action.payload.isBookmarked) {
+      users[userIndex].favouriteMovies = [
+        ...users[userIndex].favouriteMovies,
+        action.payload.imdbId,
+      ];
+
+      localStorage.setItem('sign-up-info', JSON.stringify(users));
+      localStorage.setItem('current-user', JSON.stringify(users[userIndex]));
+    }
+
+    if (!action.payload.isBookmarked) {
+      const filteredMovies = currentUser.favouriteMovies.filter(
+        (movieId) => movieId !== action.payload.imdbId
+      );
+
+      users[userIndex].favouriteMovies = filteredMovies;
+      localStorage.setItem('sign-up-info', JSON.stringify(users));
+      localStorage.setItem('current-user', JSON.stringify(users[userIndex]));
+    }
   }
 };

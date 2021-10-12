@@ -39,14 +39,14 @@ export const useValidation = (value, validators) => {
           break;
         case 'emailsRegistered':
           const emailExists = validators[validator].some(
-            (element) => value === element.email
+            (element) => value === element.userInfo.email
           );
           setIsEmailRegistered(emailExists);
           break;
         case 'isPasswordCorrect':
           if (validators[validator].dependancy) {
             const isCorrect = validators[validator].usersArray.some(
-              (user) => user.password === value
+              (user) => user.userInfo.password === value
             );
             setIsPasswordCorrect(isCorrect);
           }

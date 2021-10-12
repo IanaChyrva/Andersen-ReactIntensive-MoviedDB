@@ -34,9 +34,9 @@
     }
 
 export const getMovieByName = async (name) => {
-    const res = await getResource(`${_apiBase}${_apiKey}&s=${name}`);
-    return res.Search.map(_transformMovies)
-    }
+  const res = await getResource(`${_apiBase}${_apiKey}&s=${name}`);
+  return res.Search.map(_transformMovies);
+};
 
 export const getMovieDetails = async (id) => {
     const res = await getResource(`${_apiBase}${_apiKey}&i=${id}`);
