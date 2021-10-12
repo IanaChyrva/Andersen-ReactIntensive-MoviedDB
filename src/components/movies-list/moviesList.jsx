@@ -1,7 +1,13 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { MovieItem } from '../movie-item/MovieItem';
-import { fetchMovies, cleanMovies } from '../../store/moviesSlice';
+
+import {
+  fetchMovies,
+  cleanMovies,
+  fetchFilteredMovies,
+  cleanSelectedType,
+} from '../../store/moviesSlice';
 import imageNotFound from '../../assets/images/nothing-icon.jpg';
 import './moviesList.css';
 
@@ -10,13 +16,21 @@ export const MoviesList = () => {
   const dispatch = useDispatch();
   const parsedUrl = new URL(window.location.href);
 
-  const text = parsedUrl.searchParams.get('text');
+  const params = parsedUrl.searchParams;
+  let text = params.get('text');
+  let type = params.get('type');
+
   useEffect(() => {
-    dispatch(fetchMovies(text));
+    if (type === 'movie' || type === 'series') {
+      dispatch(fetchFilteredMovies({ text, type }));
+    } else {
+      dispatch(fetchMovies(text));
+    }
     return function cleanup() {
       dispatch(cleanMovies());
+      dispatch(cleanSelectedType());
     };
-  }, [dispatch, text]);
+  }, [text]);
 
   const MoviesBlock = () => {
     const isLoggedIn = useSelector((state) => state.users.isLoggedIn);

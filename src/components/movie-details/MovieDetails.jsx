@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchMovieDetails, cleanMovieDetails } from '../../store/moviesSlice';
+import { getMovieDetails } from '../../services/movieDBServise';
 
 import './movieDetails.css';
 import AddFavouriteBtn from '../add-favourite-btn/AddFavouriteBtn';
@@ -8,17 +9,22 @@ import AddFavouriteBtn from '../add-favourite-btn/AddFavouriteBtn';
 export const MovieDetails = (props) => {
   const users = useSelector((state) => state.users);
 
-  const { title, genre, country, posterUrl, type, released, director, plot } =
-    useSelector((state) => state.movies.movieDetails);
+  const [movieDetails, setMovieDetails] = useState([]);
 
-  const dispatch = useDispatch();
+  const { title, genre, country, posterUrl, type, released, director, plot } =
+    movieDetails;
+
+  const fetchMovieDetails = async function (id) {
+    const response = await getMovieDetails(id);
+    setMovieDetails(response);
+  };
 
   useEffect(() => {
-    dispatch(fetchMovieDetails(props.match.params.id));
+    fetchMovieDetails(props.match.params.id);
     return function cleanup() {
-      dispatch(cleanMovieDetails());
+      setMovieDetails([]);
     };
-  }, [props.match.params.id, dispatch]);
+  }, [props.match.params.id]);
 
   if (!users.isLoggedIn) {
     return (
