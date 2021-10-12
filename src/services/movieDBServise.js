@@ -30,12 +30,8 @@
     if (!res.ok) {
         throw new Error(`Could not fetch ${url}, status: ${res.status}`);
     }
-
     return await res.json();
     }
-
-
-  
 
 export const getMovieByName = async (name) => {
     const res = await getResource(`${_apiBase}${_apiKey}&s=${name}`);
@@ -44,8 +40,16 @@ export const getMovieByName = async (name) => {
 
 export const getMovieDetails = async (id) => {
     const res = await getResource(`${_apiBase}${_apiKey}&i=${id}`);
-    console.log(res)
     return  _transformMovie(res)
    
     }    
 
+export const getFilteredMovies = async (name, type) => {
+    const res = await getResource(`${_apiBase}${_apiKey}&s=${name}&type=${type}`);
+    return res  
+} 
+
+export const getFilteredMoviesTransform = async (name, type) => {
+    const res = await getResource(`${_apiBase}${_apiKey}&s=${name}&type=${type}`);
+    return res.Search.map(_transformMovies)  
+} 

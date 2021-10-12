@@ -1,14 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
-import './App.css';
 import Header from './components/header/Header';
 import Main from './components/main/Main';
-import Sidebar from './components/sidebar/Sidebar';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { startApp } from './store/userAccountSlice';
-import { useDispatch } from 'react-redux';
+
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 
 function App() {
   const dispatch = useDispatch();
@@ -17,7 +18,6 @@ function App() {
     <Router>
       <Header />
       <div className='body'>
-        <Sidebar />
         <Main />
       </div>
     </Router>
@@ -25,3 +25,5 @@ function App() {
 }
 
 export default App;
+
+

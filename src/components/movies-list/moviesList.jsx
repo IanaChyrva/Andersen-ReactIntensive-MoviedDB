@@ -1,30 +1,39 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { MovieItem } from '../movie-item/MovieItem'
 import { useEffect } from 'react'
-import { fetchMovies, cleanMovies } from '../../store/moviesSlice'
-import imageNotFound from '../../assets/images/nothing-icon.jpg'
-import './moviesList.css'
 
-;
+import { MovieItem } from '../movie-item/MovieItem'
+import { fetchMovies, cleanMovies, fetchFilteredMovies, cleanSelectedType } from '../../store/moviesSlice'
+import { Spinner } from '../spinner/spinner'
+import imageNotFound from '../../assets/images/nothing-icon.jpg'
+
+import './moviesList.css';
+
 export const MoviesList = () => {
-    
     const {movies, status} = useSelector(state => state.movies)
     const dispatch = useDispatch()
     const parsedUrl = new URL(window.location.href);
-    const text = parsedUrl.searchParams.get("text");
+    const params = parsedUrl.searchParams
+    let text = params.get('text')
+    let type = params.get('type')
+
     useEffect(() => {
-        dispatch(fetchMovies(text))
+        if(type === 'movie' || type === 'series') {
+            dispatch(fetchFilteredMovies({text, type}))
+        } else {
+            dispatch(fetchMovies(text))
+        }
         return function cleanup() {
             dispatch(cleanMovies())
+            dispatch(cleanSelectedType())  
         }
-    }, [dispatch, text])
+    }, [text])
 
    
     const MoviesBlock = () => {
         return (
             <div className='moviesList'>
-                {movies.map((item, index) => <MovieItem key={index} movie={item}/>)}
+                {movies.map((item) => <MovieItem key={item.imdbId} movie={item}/>)}
             </div>
         )
     } 
@@ -36,10 +45,18 @@ export const MoviesList = () => {
             </div>
         )
     }
-    const content = status === 'rejected' ? < MovieNotFound/> : <MoviesBlock/>
+    let content
+    if(status === 'loading') {
+        content = <Spinner/>
+    } else {
+        content = movies.length > 0  ?  <MoviesBlock/> : < MovieNotFound/> 
+    }
+ 
     return(
         <>
         {content}
         </>   
     )
 }
+
+
