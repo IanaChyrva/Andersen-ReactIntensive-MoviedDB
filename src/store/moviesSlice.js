@@ -1,66 +1,69 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getMovieByName, getMovieDetails } from '../services/movieDBServise';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import {getMovieByName, getFilteredMoviesTransform} from '../services/movieDBServise'
 
 export const fetchMovies = createAsyncThunk(
   'movies/fetchMovies',
-  async function (text, { rejectWithValue }) {
-    try {
+  async function (text) {
       const response = await getMovieByName(text);
-      console.log(response);
       return response;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
   }
-);
+ 
+)
+export const fetchFilteredMovies = createAsyncThunk(
+  'movies/fetchFilteredMovies',
+  async function(data) {
+    const {text, type} = data;
+    const response = await getFilteredMoviesTransform(text, type)
+    return response
+  }
+)
 
-export const fetchMovieDetails = createAsyncThunk(
-  'movies/fetchMovieDetails',
-  async function (id) {
-    const response = await getMovieDetails(id);
-    console.log(response);
-    return response;
-  }
-);
 const initialState = {
-  movies: [],
-  movieDetails: [],
-  status: '',
-  error: null,
-};
+        movies: [],
+        // inputValue: '',
+        // movieDetails: [],
+        selectedType: 'all',
+        status: '',
+      };
 
 const moviesSlice = createSlice({
-  name: 'movies',
-  initialState,
-  reducers: {
-    cleanMovies(state) {
-      state.movies = [];
+    name: 'movies',
+    initialState,
+    reducers: {
+      cleanMovies(state) {
+        state.movies = []
+      },
+      changeSelectedType(state, action) {
+        state.selectedType = action.payload
+      },
+      cleanSelectedType(state) {
+        state.selectedType = 'all'
+      },
+      setInputValue(state, action) {
+        state.inputValue = action.payload
+      }
     },
-    cleanMovieDetails(state) {
-      state.movieDetails = [];
-    },
-  },
-  extraReducers: {
-    [fetchMovies.pending]: (state) => {
-      state.status = 'loading';
-      state.error = null;
-    },
-    [fetchMovies.fulfilled]: (state, action) => {
-      state.status = 'fulfilled';
-      state.movies = action.payload;
-    },
-    [fetchMovies.rejected]: (state, action) => {
-      state.status = 'rejected';
-      state.error = action.payload;
-    },
-    [fetchMovieDetails.fulfilled]: (state, action) => {
-      state.movieDetails = action.payload;
-    },
-  },
-});
+    extraReducers: {
+      [fetchMovies.pending] : (state) => {
+        state.status = 'loading';
+      },
+      [fetchMovies.fulfilled] : (state, action) => {
+        state.movies = action.payload
+        state.status = 'fulfilled'
+      },
+      [fetchMovies.rejected] : (state) => {
+        state.status = 'rejected';
+      },
+      [fetchFilteredMovies.fulfilled]: (state, action) => {
+        state.movies = action.payload
+        state.status = 'fulfilled'
+      },
+      [fetchFilteredMovies.pending] : (state) => {
+        state.status = 'loading';
+      },
+    }
+}) 
 
-export const { cleanMovies, cleanMovieDetails } = moviesSlice.actions;
-export const moviesReducer = moviesSlice.reducer;
+export const { cleanMovies, changeSelectedType, cleanSelectedType} = moviesSlice.actions
+export const moviesReducer = moviesSlice.reducer
 
-// export const { loadMovies } = moviesSlice.actions;
-// export const moviesReducer = moviesSlice.reducer;

@@ -1,48 +1,62 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { MovieItem } from '../movie-item/MovieItem';
-import { useEffect } from 'react';
-import { fetchMovies, cleanMovies } from '../../store/moviesSlice';
-import imageNotFound from '../../assets/images/nothing-icon.jpg';
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+
+import { MovieItem } from '../movie-item/MovieItem'
+import { fetchMovies, cleanMovies, fetchFilteredMovies, cleanSelectedType } from '../../store/moviesSlice'
+import { Spinner } from '../spinner/spinner'
+import imageNotFound from '../../assets/images/nothing-icon.jpg'
+
 import './moviesList.css';
 
 export const MoviesList = () => {
-  const { movies, status } = useSelector((state) => state.movies);
-  const dispatch = useDispatch();
-  const parsedUrl = new URL(window.location.href);
+    const {movies, status} = useSelector(state => state.movies)
+    const dispatch = useDispatch()
+    const parsedUrl = new URL(window.location.href);
+    const params = parsedUrl.searchParams
+    let text = params.get('text')
+    let type = params.get('type')
 
-  const text = parsedUrl.searchParams.get('text');
-  useEffect(() => {
-    dispatch(fetchMovies(text));
-    return function cleanup() {
-      dispatch(cleanMovies());
-    };
-  }, [dispatch, text]);
+    useEffect(() => {
+        if(type === 'movie' || type === 'series') {
+            dispatch(fetchFilteredMovies({text, type}))
+        } else {
+            dispatch(fetchMovies(text))
+        }
+        return function cleanup() {
+            dispatch(cleanMovies())
+            dispatch(cleanSelectedType())  
+        }
+    }, [text])
 
-  const MoviesBlock = () => {
-    const isLoggedIn = useSelector((state) => state.users.isLoggedIn);
-    const { movies, status } = useSelector((state) => state.movies);
+   
+    const MoviesBlock = () => {
+        return (
+            <div className='moviesList'>
+                {movies.map((item) => <MovieItem key={item.imdbId} movie={item}/>)}
+            </div>
+        )
+    } 
+    const MovieNotFound = () => {
+        return (
+            <div className='blockNotFound'>
+                <p className='blockNotFound_text'>Movie not found</p>
+                <img src={imageNotFound} alt='not found'></img>
+            </div>
+        )
+    }
+    let content
+    if(status === 'loading') {
+        content = <Spinner/>
+    } else {
+        content = movies.length > 0  ?  <MoviesBlock/> : < MovieNotFound/> 
+    }
+ 
+    return(
+        <>
+        {content}
+        </>   
+    )
+}
 
-    return (
-      <div className='moviesList'>
-        {movies.map((item) => {
-          return (
-            <MovieItem key={item.imdbId} movie={item} isLoggedIn={isLoggedIn} />
-          );
-        })}
-      </div>
-    );
-  };
 
-  const MovieNotFound = () => {
-    return (
-      <div className='blockNotFound'>
-        <p className='blockNotFound_text'>Movie not found</p>
-        <img src={imageNotFound} alt='not found'></img>
-      </div>
-    );
-  };
-
-  const content = status === 'rejected' ? <MovieNotFound /> : <MoviesBlock />;
-  return <>{content}</>;
-};

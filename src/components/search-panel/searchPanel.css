@@ -7,7 +7,7 @@
     color: #4676D7
 }
 .searchForm {
-    width: 410px;
+    width: 530px;
     /* align-items: center; */
     margin: 40px auto 0 auto;
     display: flex;
@@ -44,10 +44,14 @@
     font-size: 16px;
 }
 
+.searchForm-select {
+    margin-left: 10px;
+}
+
 .searchPanel ul {
     margin-top: 10px;
     width: 310px;
-    margin-left: 48px;
+    margin-left: -13px;
     display: flex;
     flex-direction: column;
 } 

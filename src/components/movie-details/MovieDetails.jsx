@@ -1,20 +1,23 @@
 import React from 'react'
-import {useSelector, useDispatch} from 'react-redux'
-import { useEffect } from 'react'
-import { fetchMovieDetails, cleanMovieDetails } from '../../store/moviesSlice'
+import { useEffect, useState } from 'react'
+import { getMovieDetails } from '../../services/movieDBServise'
 
 import './movieDetails.css'
 
 export const MovieDetails = (props) => {
-    const {title, genre, country, posterUrl, type, released, director, plot} = useSelector(state => state.movies.movieDetails)
-    console.log(title)
-    const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(fetchMovieDetails(props.match.params.id))
-        return function cleanup() {
-            dispatch(cleanMovieDetails())
-        }
-    },[props.match.params.id, dispatch])
+    const [movieDetails, setMovieDetails] = useState([])
+    const {title, genre, country, posterUrl, type, released, director, plot} = movieDetails
+    const fetchMovieDetails = async function(id) {
+        const response = await getMovieDetails(id)
+        setMovieDetails(response)
+      }
+      useEffect(() => {
+            fetchMovieDetails(props.match.params.id)
+            return function cleanup() {
+               setMovieDetails([])
+            }
+          }, 
+    [props.match.params.id])
 
     return (
         <div className="card mb-3" style={{maxWidth: 700}}>
@@ -26,7 +29,6 @@ export const MovieDetails = (props) => {
                     <div className="card-body">
                     <h5 className="card-title">{title}</h5>
                     <p className="card-text">{plot}</p>
-                    {/* <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p> */}
                     </div> 
                     <li className="card-item">Genre: {genre}</li>
                     <li className="card-item">Released: {released}</li>
