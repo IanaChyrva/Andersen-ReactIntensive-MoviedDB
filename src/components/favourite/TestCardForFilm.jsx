@@ -21,6 +21,7 @@ const TestCardForFilm = ({ movie, isMovieBookmarked, isLoggedIn }) => {
           id,
         },
         isBookmarked: !isBookmarked,
+        id,
       })
     );
   };

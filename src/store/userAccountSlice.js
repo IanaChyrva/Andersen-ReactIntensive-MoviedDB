@@ -11,6 +11,10 @@ const userAccountSlice = createSlice({
   name: 'userAccount',
   initialState,
   reducers: {
+    startApp: (state) => {
+      state.startApp = true;
+    },
+
     signup: (state, action) => {
       state.users = [...state.users, action.payload];
     },
@@ -31,25 +35,18 @@ const userAccountSlice = createSlice({
       state.currentUser = action.payload.currentUser || null;
     },
 
-    startApp: (state) => {
-      state.startApp = true;
-    },
-
     toggleFavourite: (state, action) => {
       if (action.payload.isBookmarked) {
         state.currentUser.favouriteMovies = [
           ...state.currentUser.favouriteMovies,
-          {
-            movieData: action.payload.movieData,
-            isBookmarked: action.payload.isBookmarked,
-          },
+          action.payload.id,
         ];
       }
       if (!action.payload.isBookmarked) {
         state.currentUser.favouriteMovies =
-          state.currentUser.favouriteMovies.filter((movie) => {
-            return movie.movieData.title !== action.payload.movieData.title;
-          });
+          state.currentUser.favouriteMovies.filter(
+            (movieId) => movieId !== action.payload.id
+          );
       }
     },
   },

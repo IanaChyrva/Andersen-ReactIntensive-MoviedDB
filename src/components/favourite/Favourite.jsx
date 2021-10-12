@@ -1,29 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { login } from '../../store/userAccountSlice';
 import TestCardForFilm from './TestCardForFilm';
 
+import { fetchFavourites } from '../../services/fetchFavourites';
+
 const Favourite = () => {
-  const savedMovies = useSelector(
+  const moviesIds = useSelector(
     (state) => state.users.currentUser.favouriteMovies
   );
+  const [movies, setMovies] = useState(null);
   const isLoggedIn = useSelector((state) => state.users.isLoggedIn);
 
-  return (
-    <div>
-      <div>Favourite</div>
+  useEffect(() => {
+    fetchFavourites(setMovies, moviesIds);
+  }, [moviesIds]);
+
+  if (movies) {
+    return (
       <div className='moviesList'>
-        {savedMovies.map((movie) => {
+        {movies.map((movie) => {
           return (
-            <div key={movie.movieData.id}>
+            <div key={movie.id}>
               <TestCardForFilm
-                movie={movie.movieData}
+                movie={movie}
                 isLoggedIn={isLoggedIn}
-                isMovieBookmarked={movie.isBookmarked}
+                isMovieBookmarked={true}
               />
             </div>
           );
         })}
       </div>
+    );
+  }
+  return (
+    <div>
+      <div>Favourite</div>
     </div>
   );
 };
