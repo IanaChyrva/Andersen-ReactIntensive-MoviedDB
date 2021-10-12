@@ -53,7 +53,7 @@ export const userAccoutMiddleware = (store) => (next) => (action) => {
     if (action.payload.isBookmarked) {
       users[userIndex].favouriteMovies = [
         ...users[userIndex].favouriteMovies,
-        action.payload.id,
+        action.payload.imdbId,
       ];
 
       localStorage.setItem('sign-up-info', JSON.stringify(users));
@@ -62,7 +62,7 @@ export const userAccoutMiddleware = (store) => (next) => (action) => {
 
     if (!action.payload.isBookmarked) {
       const filteredMovies = currentUser.favouriteMovies.filter(
-        (movieId) => movieId !== action.payload.id
+        (movieId) => movieId !== action.payload.imdbId
       );
 
       users[userIndex].favouriteMovies = filteredMovies;

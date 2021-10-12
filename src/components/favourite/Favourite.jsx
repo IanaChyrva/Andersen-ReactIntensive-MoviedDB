@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { login } from '../../store/userAccountSlice';
 import TestCardForFilm from './TestCardForFilm';
 
 import { fetchFavourites } from '../../services/fetchFavourites';
@@ -21,7 +20,7 @@ const Favourite = () => {
       <div className='moviesList'>
         {movies.map((movie) => {
           return (
-            <div key={movie.id}>
+            <div key={movie.imdbId}>
               <TestCardForFilm
                 movie={movie}
                 isLoggedIn={isLoggedIn}

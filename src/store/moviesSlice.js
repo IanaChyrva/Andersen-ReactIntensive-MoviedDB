@@ -1,20 +1,30 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getMovieByName } from '../services/movieDBServise';
+import { getMovieByName, getMovieDetails } from '../services/movieDBServise';
 
 export const fetchMovies = createAsyncThunk(
   'movies/fetchMovies',
   async function (text, { rejectWithValue }) {
     try {
       const response = await getMovieByName(text);
+      console.log(response);
       return response;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
+
+export const fetchMovieDetails = createAsyncThunk(
+  'movies/fetchMovieDetails',
+  async function (id) {
+    const response = await getMovieDetails(id);
+    console.log(response);
+    return response;
+  }
+);
 const initialState = {
   movies: [],
-  movie: [],
+  movieDetails: [],
   status: '',
   error: null,
 };
@@ -23,8 +33,11 @@ const moviesSlice = createSlice({
   name: 'movies',
   initialState,
   reducers: {
-    loadMovies(state, action) {
-      state.movies = action.payload;
+    cleanMovies(state) {
+      state.movies = [];
+    },
+    cleanMovieDetails(state) {
+      state.movieDetails = [];
     },
   },
   extraReducers: {
@@ -40,8 +53,14 @@ const moviesSlice = createSlice({
       state.status = 'rejected';
       state.error = action.payload;
     },
+    [fetchMovieDetails.fulfilled]: (state, action) => {
+      state.movieDetails = action.payload;
+    },
   },
 });
 
-export const { loadMovies } = moviesSlice.actions;
+export const { cleanMovies, cleanMovieDetails } = moviesSlice.actions;
 export const moviesReducer = moviesSlice.reducer;
+
+// export const { loadMovies } = moviesSlice.actions;
+// export const moviesReducer = moviesSlice.reducer;

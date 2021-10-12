@@ -6,7 +6,7 @@ import { FaBookmark } from 'react-icons/fa';
 import { FaRegBookmark } from 'react-icons/fa';
 
 const TestCardForFilm = ({ movie, isMovieBookmarked, isLoggedIn }) => {
-  const { title, year, posterUrl, id } = movie;
+  const { title, year, posterUrl, imdbId } = movie;
   const [isBookmarked, setIsBookmarked] = useState(isMovieBookmarked);
   const dispatch = useDispatch();
 
@@ -14,14 +14,8 @@ const TestCardForFilm = ({ movie, isMovieBookmarked, isLoggedIn }) => {
     setIsBookmarked(!isBookmarked);
     dispatch(
       toggleFavourite({
-        movieData: {
-          title,
-          year,
-          posterUrl,
-          id,
-        },
         isBookmarked: !isBookmarked,
-        id,
+        imdbId,
       })
     );
   };

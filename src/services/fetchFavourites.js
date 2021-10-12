@@ -8,7 +8,7 @@ export const fetchFavourites = (setFunction, ids) => {
     const moviesData = response.map((res) => {
       return {
         title: res.data.Title,
-        id: res.data.imdbID,
+        imdbId: res.data.imdbID,
         year: res.data.Year,
         posterUrl: res.data.Poster,
       };

@@ -7,7 +7,7 @@ import { FaBookmark } from 'react-icons/fa';
 import { FaRegBookmark } from 'react-icons/fa';
 
 export const MovieItem = (props) => {
-  const { title, year, posterUrl, id } = props.movie;
+  const { title, year, posterUrl, imdbId } = props.movie;
   const [isBookmarked, setIsBookmarked] = useState(false);
   const dispatch = useDispatch();
 
@@ -15,14 +15,8 @@ export const MovieItem = (props) => {
     setIsBookmarked(!isBookmarked);
     dispatch(
       toggleFavourite({
-        movieData: {
-          title,
-          year,
-          posterUrl,
-          id,
-        },
         isBookmarked: !isBookmarked,
-        id,
+        imdbId,
       })
     );
   };

@@ -39,13 +39,13 @@ const userAccountSlice = createSlice({
       if (action.payload.isBookmarked) {
         state.currentUser.favouriteMovies = [
           ...state.currentUser.favouriteMovies,
-          action.payload.id,
+          action.payload.imdbId,
         ];
       }
       if (!action.payload.isBookmarked) {
         state.currentUser.favouriteMovies =
           state.currentUser.favouriteMovies.filter(
-            (movieId) => movieId !== action.payload.id
+            (movieId) => movieId !== action.payload.imdbId
           );
       }
     },

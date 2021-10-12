@@ -1,12 +1,23 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { MovieItem } from '../movie-item/MovieItem';
+import { useEffect } from 'react';
+import { fetchMovies, cleanMovies } from '../../store/moviesSlice';
 import imageNotFound from '../../assets/images/nothing-icon.jpg';
 import './moviesList.css';
-import * as _ from 'lodash';
 
 export const MoviesList = () => {
   const { movies, status } = useSelector((state) => state.movies);
+  const dispatch = useDispatch();
+  const parsedUrl = new URL(window.location.href);
+
+  const text = parsedUrl.searchParams.get('text');
+  useEffect(() => {
+    dispatch(fetchMovies(text));
+    return function cleanup() {
+      dispatch(cleanMovies());
+    };
+  }, [dispatch, text]);
 
   const MoviesBlock = () => {
     const isLoggedIn = useSelector((state) => state.users.isLoggedIn);
@@ -16,12 +27,13 @@ export const MoviesList = () => {
       <div className='moviesList'>
         {movies.map((item) => {
           return (
-            <MovieItem key={item.id} movie={item} isLoggedIn={isLoggedIn} />
+            <MovieItem key={item.imdbId} movie={item} isLoggedIn={isLoggedIn} />
           );
         })}
       </div>
     );
   };
+
   const MovieNotFound = () => {
     return (
       <div className='blockNotFound'>
@@ -30,6 +42,7 @@ export const MoviesList = () => {
       </div>
     );
   };
+
   const content = status === 'rejected' ? <MovieNotFound /> : <MoviesBlock />;
   return <>{content}</>;
 };
