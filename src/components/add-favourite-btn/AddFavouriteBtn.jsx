@@ -20,7 +20,13 @@ const AddFavouriteBtn = ({ isMovieBookmarked, imdbId }) => {
 
   return (
     <div onClick={handleToggleBookmark}>
-      <div>{isMovieBookmarked ? <FaBookmark /> : <FaRegBookmark />}</div>
+      <div>
+        {isMovieBookmarked ? (
+          <FaBookmark size={20} />
+        ) : (
+          <FaRegBookmark size={20} />
+        )}
+      </div>
     </div>
   );
 };

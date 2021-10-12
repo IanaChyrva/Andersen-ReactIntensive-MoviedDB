@@ -79,11 +79,12 @@ export const SearchFormSuggest = () => {
         <select
           className='searchForm-select'
           required
+          defaultValue={'DEFAULT'}
           onChange={(e) => {
             onSelectValueGet(e);
           }}
         >
-          <option disabled selected>
+          <option disabled value='DEFAULT'>
             Выберите тип
           </option>
           <option value='movie'>фильм</option>

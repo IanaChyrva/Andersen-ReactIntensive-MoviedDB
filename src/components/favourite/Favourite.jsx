@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { fetchFavourites } from '../../services/fetchFavourites';
 import { MovieItem } from '../movie-item/MovieItem';
+import { Spinner } from '../spinner/spinner';
 
 const Favourite = () => {
   const moviesIds = useSelector(
@@ -15,26 +16,26 @@ const Favourite = () => {
     fetchFavourites(setMovies, moviesIds);
   }, [moviesIds]);
 
-  if (movies) {
-    return (
-      <div className='moviesList'>
-        {movies.map((movie) => {
-          return (
-            <MovieItem
-              key={movie.imdbId}
-              movie={movie}
-              isLoggedIn={isLoggedIn}
-            />
-          );
-        })}
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <div>Любимые фильмы</div>
-    </div>
+    <>
+      {movies ? (
+        <div className='moviesList'>
+          {movies.map((movie) => {
+            return (
+              <MovieItem
+                key={movie.imdbId}
+                movie={movie}
+                isLoggedIn={isLoggedIn}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <div>
+          <Spinner />
+        </div>
+      )}
+    </>
   );
 };
 

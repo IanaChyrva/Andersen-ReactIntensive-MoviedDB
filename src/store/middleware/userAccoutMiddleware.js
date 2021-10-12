@@ -7,41 +7,44 @@ import {
   toggleFavourite,
 } from '../userAccountSlice';
 
+import { localSet, localGet } from '../../services/local';
+
 export const userAccoutMiddleware = (store) => (next) => (action) => {
   next(action);
 
   if (startApp.match(action)) {
-    const storedUsers = localStorage.getItem('sign-up-info');
-    const currentUser = localStorage.getItem('current-user');
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const storedUsers = localGet('sign-up-info');
+    const currentUser = localGet('current-user');
+    const isLoggedIn = localGet('isLoggedIn');
 
     store.dispatch(
       getUsers({
-        users: JSON.parse(storedUsers),
-        isLoggedIn: JSON.parse(isLoggedIn),
-        currentUser: JSON.parse(currentUser),
+        users: storedUsers,
+        isLoggedIn: isLoggedIn,
+        currentUser: currentUser,
       })
     );
   }
 
   if (signup.match(action)) {
     const users = store.getState().users.users;
-    localStorage.setItem('sign-up-info', JSON.stringify(users));
+    localSet('sign-up-info', users);
   }
 
   if (login.match(action)) {
     const currentUser = store.getState().users.currentUser;
-    localStorage.setItem('current-user', JSON.stringify(currentUser));
-    localStorage.setItem('isLoggedIn', JSON.stringify(true));
+    localSet('current-user', currentUser);
+    localSet('isLoggedIn', true);
   }
 
   if (logout.match(action)) {
-    localStorage.setItem('isLoggedIn', JSON.stringify(false));
+    localSet('isLoggedIn', false);
+
     localStorage.removeItem('current-user');
   }
 
   if (toggleFavourite.match(action)) {
-    const users = JSON.parse(localStorage.getItem('sign-up-info'));
+    const users = localGet('sign-up-info');
     const { currentUser } = store.getState().users;
     const userIndex = users.findIndex((user) => {
       return (
@@ -56,8 +59,8 @@ export const userAccoutMiddleware = (store) => (next) => (action) => {
         action.payload.imdbId,
       ];
 
-      localStorage.setItem('sign-up-info', JSON.stringify(users));
-      localStorage.setItem('current-user', JSON.stringify(users[userIndex]));
+      localSet('sign-up-info', users);
+      localSet('current-user', users[userIndex]);
     }
 
     if (!action.payload.isBookmarked) {
@@ -66,8 +69,9 @@ export const userAccoutMiddleware = (store) => (next) => (action) => {
       );
 
       users[userIndex].favouriteMovies = filteredMovies;
-      localStorage.setItem('sign-up-info', JSON.stringify(users));
-      localStorage.setItem('current-user', JSON.stringify(users[userIndex]));
+
+      localSet('sign-up-info', users);
+      localSet('current-user', users[userIndex]);
     }
   }
 };
