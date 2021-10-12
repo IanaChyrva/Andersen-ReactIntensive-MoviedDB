@@ -1,25 +1,11 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { toggleFavourite } from '../../store/userAccountSlice';
-import './movieItem.css';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import classnames from 'classnames';
-import { FaBookmark } from 'react-icons/fa';
-import { FaRegBookmark } from 'react-icons/fa';
+import AddFavouriteBtn from '../add-favourite-btn/AddFavouriteBtn';
+import './movieItem.css';
 
 export const MovieItem = (props) => {
-  const { title, year, posterUrl, imdbId } = props.movie;
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const dispatch = useDispatch();
-
-  const handleToggleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
-    dispatch(
-      toggleFavourite({
-        isBookmarked: !isBookmarked,
-        imdbId,
-      })
-    );
-  };
+  const { title, year, posterUrl, imdbId, isMovieBookmarked } = props.movie;
 
   return (
     <div className='card movieCard'>
@@ -33,15 +19,17 @@ export const MovieItem = (props) => {
         <p className='card-text yearInfo'>{year}</p>
         <div className='card-bottom'>
           <div className='detailsLink'>
-            <a href='#'>Подробнее</a>
+            <Link to={`/movie/${imdbId}`}>Подробнее</Link>
           </div>
           <div
             className={classnames('bookmark toggledOff', {
               hidden: !props.isLoggedIn,
             })}
-            onClick={handleToggleBookmark}
           >
-            {isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
+            <AddFavouriteBtn
+              imdbId={imdbId}
+              isMovieBookmarked={isMovieBookmarked}
+            />
           </div>
         </div>
       </div>

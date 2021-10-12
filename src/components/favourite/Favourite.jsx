@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import TestCardForFilm from './TestCardForFilm';
 
 import { fetchFavourites } from '../../services/fetchFavourites';
+import { MovieItem } from '../movie-item/MovieItem';
 
 const Favourite = () => {
   const moviesIds = useSelector(
@@ -20,21 +20,20 @@ const Favourite = () => {
       <div className='moviesList'>
         {movies.map((movie) => {
           return (
-            <div key={movie.imdbId}>
-              <TestCardForFilm
-                movie={movie}
-                isLoggedIn={isLoggedIn}
-                isMovieBookmarked={true}
-              />
-            </div>
+            <MovieItem
+              key={movie.imdbId}
+              movie={movie}
+              isLoggedIn={isLoggedIn}
+            />
           );
         })}
       </div>
     );
   }
+
   return (
     <div>
-      <div>Favourite</div>
+      <div>Любимые фильмы</div>
     </div>
   );
 };
