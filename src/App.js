@@ -9,21 +9,19 @@ import { startApp } from './store/userAccountSlice';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-
 function App() {
   const dispatch = useDispatch();
   dispatch(startApp());
   return (
     <Router>
-      <Header />
-      <div className='body'>
-        <Main />
+      <div className='wrapper'>
+        <Header />
+        <div className='body'>
+          <Main />
+        </div>
       </div>
     </Router>
   );
 }
 
 export default App;
-
-
