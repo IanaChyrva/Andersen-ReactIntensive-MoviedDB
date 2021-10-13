@@ -1,10 +1,6 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
-<<<<<<< HEAD
-import { useSelector} from 'react-redux';
-=======
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
->>>>>>> ebcb441ef7d00ed7984acedba725668b535c9162
 import { getMovieDetails } from '../../services/movieDBServise';
 
 import './movieDetails.css';

@@ -1,5 +1,4 @@
 .searchPanel {
-<<<<<<< HEAD
     margin: 50px auto 0 auto;
     width: 800px;
     min-height: 240px;
@@ -41,50 +40,6 @@
     background: indigo;
     color: #fff;
     font-size: 16px;
-=======
-  /* margin: 50px auto 0 auto; */
-}
-
-.searchPanel h1 {
-  color: #4676d7;
-}
-.searchForm {
-  width: 530px;
-  /* align-items: center; */
-  margin: 0 auto;
-  display: flex;
-  /* width: 100%; */
-}
-
-/* .searchForm form {
-    display: flex;
-    width: 100%;
-  
-} */
-.searchForm input {
-  width: 310px;
-  height: 35px;
-  border-radius: 5px;
-  border-color: #4676d7;
-  border-width: 1px;
-  padding-left: 10px;
-}
-
-.searchForm input:focus {
-  background-color: beige;
-  border-color: lightseagreen;
-  outline: none;
-}
-
-.searchForm button {
-  margin: 0 auto 0 30px;
-  height: 35px;
-  border: 0;
-  border-radius: 5px;
-  background: #4676d7;
-  color: #fff;
-  font-size: 16px;
->>>>>>> ebcb441ef7d00ed7984acedba725668b535c9162
 }
 .searchForm button:hover {
     background-color:rebeccapurple;
@@ -92,7 +47,6 @@
 }
 
 .searchForm-select {
-<<<<<<< HEAD
     margin-left: 10px;
     border-radius: 5px;
     border-color: indigo;
@@ -112,18 +66,6 @@
     display: flex;
     flex-direction: column;
 } 
-=======
-  margin-left: 10px;
-}
-
-.searchPanel ul {
-  margin-top: 10px;
-  width: 310px;
-  margin-left: -13px;
-  display: flex;
-  flex-direction: column;
-}
->>>>>>> ebcb441ef7d00ed7984acedba725668b535c9162
 
 .searchPanel_link {
   cursor: pointer;
@@ -132,14 +74,8 @@
   color: black;
 }
 
-<<<<<<< HEAD
 
 .searchPanel_link:hover{
     color:indigo;
     transform: translate(5px);
 }
-=======
-.searchPanel_link:hover {
-  color: mediumslateblue;
-}
->>>>>>> ebcb441ef7d00ed7984acedba725668b535c9162

@@ -59,8 +59,8 @@ export const MoviesList = () => {
   const MovieNotFound = () => {
     return (
       <div className='blockNotFound'>
-        <p className='blockNotFound_text'>Movie not found</p>
-        <img src={imageNotFound} alt='not found'></img>
+        <p className='blockNotFound-text'>Movie not found</p>
+        <img src={imageNotFound} alt='not found' className='blockNotFound-img'></img>
       </div>
     );
   };
