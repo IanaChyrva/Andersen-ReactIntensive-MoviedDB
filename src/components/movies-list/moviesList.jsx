@@ -36,7 +36,7 @@ export const MoviesList = () => {
     const isLoggedIn = useSelector((state) => state.users.isLoggedIn);
     const users = useSelector((state) => state.users);
 
-    const moviesArray = !isLoggedIn
+    const moviesUpdated = !isLoggedIn
       ? [...movies]
       : movies.map((movie) => ({
           ...movie,
@@ -47,7 +47,7 @@ export const MoviesList = () => {
 
     return (
       <div className='moviesList'>
-        {moviesArray.map((item) => {
+        {moviesUpdated.map((item) => {
           return (
             <MovieItem key={item.imdbId} movie={item} isLoggedIn={isLoggedIn} />
           );

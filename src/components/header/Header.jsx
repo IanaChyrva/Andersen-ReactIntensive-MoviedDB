@@ -1,9 +1,10 @@
 import React from 'react';
 import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
-import styles from './Header.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../store/userAccountSlice';
+import { BiCameraMovie } from 'react-icons/bi';
+import styles from './Header.module.css';
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -12,7 +13,6 @@ export default function Header() {
   let currentUser = useSelector((state) => state.users.currentUser);
 
   const handleLogout = () => {
-    console.log('to remove');
     dispatch(logout());
   };
 
@@ -24,53 +24,53 @@ export default function Header() {
           className={styles.logo}
           activeClassName={styles.selected}
         >
-          PPCorn
+          <BiCameraMovie className={styles.logoImage} size={70} />
         </NavLink>
       </div>
-      <NavLink
-        to='/favourite'
-        className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
-        activeClassName={styles.selected}
-      >
-        Любимые фильмы
-      </NavLink>
-
-      <NavLink
-        to='/history'
-        className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
-        activeClassName={styles.selected}
-      >
-        История
-      </NavLink>
-      <NavLink
-        to='/sign-up'
-        className={classnames(styles.item, { [styles.hidden]: isLoggedIn })}
-        activeClassName={styles.selected}
-      >
-        Регистрация
-      </NavLink>
-      <NavLink
-        to='/login'
-        className={classnames(styles.item, { [styles.hidden]: isLoggedIn })}
-        activeClassName={styles.selected}
-      >
-        Вход
-      </NavLink>
-      <div
-        className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
-      >
-        {currentUser
-          ? `${currentUser.userInfo.name} ${currentUser.userInfo.lastname}`
-          : ''}
+      <div className={styles.tabs}>
+        <NavLink
+          to='/favourite'
+          className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
+          activeClassName={styles.selected}
+        >
+          Любимые фильмы
+        </NavLink>
+        <div className={styles.accountTabs}>
+          <NavLink
+            to='/sign-up'
+            className={classnames(styles.item, { [styles.hidden]: isLoggedIn })}
+            activeClassName={styles.selected}
+          >
+            Регистрация
+          </NavLink>
+          <NavLink
+            to='/login'
+            className={classnames(styles.item, { [styles.hidden]: isLoggedIn })}
+            activeClassName={styles.selected}
+          >
+            Вход
+          </NavLink>
+          <div
+            className={classnames(styles.item, {
+              [styles.hidden]: !isLoggedIn,
+            })}
+          >
+            {currentUser
+              ? `${currentUser.userInfo.name} ${currentUser.userInfo.lastname}`
+              : ''}
+          </div>
+          <NavLink
+            to='/login'
+            className={classnames(styles.item, {
+              [styles.hidden]: !isLoggedIn,
+            })}
+            activeClassName={styles.selected}
+            onClick={handleLogout}
+          >
+            Выход
+          </NavLink>
+        </div>
       </div>
-      <NavLink
-        to='/login'
-        className={classnames(styles.item, { [styles.hidden]: !isLoggedIn })}
-        activeClassName={styles.selected}
-        onClick={handleLogout}
-      >
-        Выход
-      </NavLink>
     </header>
   );
 }

@@ -1,31 +1,26 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import Favourite from '../favourite/Favourite';
-import History from '../history/History';
 import LoginPage from '../login-page/LoginPage';
 import RegistrationForm from '../registration-form/RegistrationForm';
-import {MoviesList} from '../movies-list/moviesList'
-import { SearchForm } from '../search-panel/SearchForm'
+import { MoviesList } from '../movies-list/moviesList';
+import { SearchForm } from '../search-panel/SearchForm';
 import { SearchFormSuggest } from '../search-panel/SearchFormSuggest';
 import { MovieDetails } from '../movie-details/MovieDetails';
-import './Main.css'
+import './Main.css';
 
 const Main = () => {
+  const isLoggedIn = useSelector((state) => state.users.isLoggedIn);
   return (
     <div className='mainWindow'>
       <Switch>
         <Route exact path='/'>
-          <SearchFormSuggest/>
-        </Route>
-        <Route path='/history'>
-          <History />
+          <SearchFormSuggest />
         </Route>
         <Route path='/favourite'>
-          <Favourite />
-        </Route>
-        <Route path='/favourite'>
-          <Favourite />
+          {isLoggedIn ? <Favourite /> : <Redirect to='/login' />}
         </Route>
         <Route path='/sign-up'>
           <RegistrationForm />
@@ -42,7 +37,7 @@ const Main = () => {
             <MoviesList />
           </div>
         </Route>
-        <Route path='/movie/:id' component={MovieDetails}/>
+        <Route path='/movie/:id' component={MovieDetails} />
       </Switch>
     </div>
   );

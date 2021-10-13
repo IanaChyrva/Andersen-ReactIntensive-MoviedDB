@@ -1,6 +1,10 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { useSelector} from 'react-redux';
+=======
+import { useSelector } from 'react-redux';
+>>>>>>> ebcb441ef7d00ed7984acedba725668b535c9162
 import { getMovieDetails } from '../../services/movieDBServise';
 
 import './movieDetails.css';
@@ -26,69 +30,45 @@ export const MovieDetails = (props) => {
     };
   }, [props.match.params.id]);
 
-  if (!users.isLoggedIn) {
-    return (
-      <div className='card mb-3' style={{ maxWidth: 700 }}>
-        <div className='row g-0'>
-          <div className='col-md-4'>
-            <img
-              src={posterUrl}
-              className='img-fluid rounded-start'
-              alt='poster'
-            />
-          </div>
-          <div className='col-md-8'>
-            <div className='card-body'>
-              <h5 className='card-title'>{title}</h5>
-              <p className='card-text'>{plot}</p>
-              <p className='card-text'>
-                {/* <small className='text-muted'>Last updated 3 mins ago</small> */}
-              </p>
-            </div>
-            <li className='card-item'>Genre: {genre}</li>
-            <li className='card-item'>Released: {released}</li>
-            <li className='card-item'>Country: {country}</li>
-            <li className='card-item'>Director: {director}</li>
-            <li className='card-item'>Type: {type}</li>
-          </div>
-        </div>
-      </div>
-    );
-  } else {
-    const saved = users.currentUser.favouriteMovies;
+  const getIsBookmarked = (state) => {
+    const saved = state.currentUser.favouriteMovies;
     let isMovieBookmarked = saved.includes(props.match.params.id);
+    return isMovieBookmarked;
+  };
 
-    return (
-      <div className='card mb-3' style={{ maxWidth: 700 }}>
-        <div className='row g-0'>
-          <div className='col-md-4'>
-            <img
-              src={posterUrl}
-              className='img-fluid rounded-start'
-              alt='poster'
-            />
+  return (
+    <div className='card mb-3' style={{ maxWidth: 700 }}>
+      <div className='row g-0 wrapper'>
+        <div className='col-md-4'>
+          <img
+            src={posterUrl}
+            className='img-fluid rounded-start'
+            alt='poster'
+          />
+        </div>
+        <div className='col-md-8'>
+          <div className='card-body'>
+            <h5 className='card-title'>{title}</h5>
+            <p className='card-text'>{plot}</p>
+            <p className='card-text'>
+              {/* <small className='text-muted'>Last updated 3 mins ago</small> */}
+            </p>
           </div>
-          <div className='col-md-8'>
-            <div className='card-body'>
-              <h5 className='card-title'>{title}</h5>
-              <p className='card-text'>{plot}</p>
-              <p className='card-text'>
-              </p>
-            </div>
-            <li className='card-item'>Genre: {genre}</li>
-            <li className='card-item'>Released: {released}</li>
-            <li className='card-item'>Country: {country}</li>
-            <li className='card-item'>Director: {director}</li>
-            <li className='card-item'>Type: {type}</li>
-            <div>
+          <li className='card-item'>Genre: {genre}</li>
+          <li className='card-item'>Released: {released}</li>
+          <li className='card-item'>Country: {country}</li>
+          <li className='card-item'>Director: {director}</li>
+          <li className='card-item'>Type: {type}</li>
+          {users.isLoggedIn ? (
+            <div className='add-favourite'>
               <AddFavouriteBtn
-                isMovieBookmarked={isMovieBookmarked}
+                isMovieBookmarked={getIsBookmarked(users)}
                 imdbId={props.match.params.id}
               />
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 };

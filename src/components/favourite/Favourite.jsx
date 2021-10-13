@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 
 import { fetchFavourites } from '../../services/fetchFavourites';
 import { MovieItem } from '../movie-item/MovieItem';
+import { Spinner } from '../spinner/spinner';
 
 const Favourite = () => {
   const moviesIds = useSelector(
@@ -15,8 +17,9 @@ const Favourite = () => {
     fetchFavourites(setMovies, moviesIds);
   }, [moviesIds]);
 
-  if (movies) {
-    return (
+  let content;
+  if (movies && movies.length > 0) {
+    content = (
       <div className='moviesList'>
         {movies.map((movie) => {
           return (
@@ -29,13 +32,21 @@ const Favourite = () => {
         })}
       </div>
     );
+  } else if (movies && movies.length === 0) {
+    content = (
+      <div>
+        <div>Здесь пока пусто. Но это поправимо.</div>
+        <div>Начать {<NavLink to='/'>поиск</NavLink>}.</div>
+      </div>
+    );
+  } else {
+    content = (
+      <div>
+        <Spinner />
+      </div>
+    );
   }
-
-  return (
-    <div>
-      <div>Любимые фильмы</div>
-    </div>
-  );
+  return <>{content}</>;
 };
 
 export default Favourite;
