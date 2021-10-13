@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Switch, Route, NavLink, useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import { fetchFavourites } from '../../services/fetchFavourites';
 import { MovieItem } from '../movie-item/MovieItem';

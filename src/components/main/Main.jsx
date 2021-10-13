@@ -1,5 +1,6 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import Favourite from '../favourite/Favourite';
 import LoginPage from '../login-page/LoginPage';
@@ -11,6 +12,7 @@ import { MovieDetails } from '../movie-details/MovieDetails';
 import './Main.css';
 
 const Main = () => {
+  const isLoggedIn = useSelector((state) => state.users.isLoggedIn);
   return (
     <div className='mainWindow'>
       <Switch>
@@ -18,7 +20,7 @@ const Main = () => {
           <SearchFormSuggest />
         </Route>
         <Route path='/favourite'>
-          <Favourite />
+          {isLoggedIn ? <Favourite /> : <Redirect to='/login' />}
         </Route>
         <Route path='/sign-up'>
           <RegistrationForm />
