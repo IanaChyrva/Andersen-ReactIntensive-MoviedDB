@@ -4,18 +4,21 @@
   color: white;
   display: flex;
   align-items: center;
-
   justify-content: space-between;
-  position: relative;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+  background: #25292c;
+  color: #fafafa;
+  box-shadow: 1px 1px 10px #080808;
 }
 
 .logo {
-  color: white;
   margin-left: 40px;
 }
 
 .logo:hover {
-  color: white;
+  color: #61bbfb;
   text-decoration: none;
 }
 .logoImage:hover {
@@ -30,12 +33,13 @@
 }
 
 .selected {
-  font-size: 26px;
+  color: #61bbfb;
 }
 
 .item:hover {
   color: white;
   text-decoration: none;
+  color: #61bbfb;
 }
 
 .tabs {
