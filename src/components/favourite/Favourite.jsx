@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Switch, Route, NavLink, useHistory } from 'react-router-dom';
 
 import { fetchFavourites } from '../../services/fetchFavourites';
 import { MovieItem } from '../movie-item/MovieItem';
@@ -16,27 +17,36 @@ const Favourite = () => {
     fetchFavourites(setMovies, moviesIds);
   }, [moviesIds]);
 
-  return (
-    <>
-      {movies ? (
-        <div className='moviesList'>
-          {movies.map((movie) => {
-            return (
-              <MovieItem
-                key={movie.imdbId}
-                movie={movie}
-                isLoggedIn={isLoggedIn}
-              />
-            );
-          })}
-        </div>
-      ) : (
-        <div>
-          <Spinner />
-        </div>
-      )}
-    </>
-  );
+  let content;
+  if (movies && movies.length > 0) {
+    content = (
+      <div className='moviesList'>
+        {movies.map((movie) => {
+          return (
+            <MovieItem
+              key={movie.imdbId}
+              movie={movie}
+              isLoggedIn={isLoggedIn}
+            />
+          );
+        })}
+      </div>
+    );
+  } else if (movies && movies.length === 0) {
+    content = (
+      <div>
+        <div>Здесь пока пусто. Но это поправимо.</div>
+        <div>Начать {<NavLink to='/'>поиск</NavLink>}.</div>
+      </div>
+    );
+  } else {
+    content = (
+      <div>
+        <Spinner />
+      </div>
+    );
+  }
+  return <>{content}</>;
 };
 
 export default Favourite;
