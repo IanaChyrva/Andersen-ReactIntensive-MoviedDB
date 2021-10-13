@@ -13,10 +13,9 @@ import { Spinner } from '../spinner/spinner';
 import './moviesList.css';
 
 export const MoviesList = () => {
-  const { movies, status } = useSelector((state) => state.movies);
+  const { movies, status} = useSelector((state) => state.movies);
   const dispatch = useDispatch();
   const parsedUrl = new URL(window.location.href);
-
   const params = parsedUrl.searchParams;
   let text = params.get('text');
   let type = params.get('type');

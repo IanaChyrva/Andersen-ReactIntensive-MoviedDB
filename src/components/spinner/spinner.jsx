@@ -6,7 +6,7 @@ export const Spinner = () => {
         style={{
           width: '3rem',
           height: '3rem',
-          color: '#4676D7',
+          color: 'olivedrab',
           marginTop: 70,
         }}
         role='status'

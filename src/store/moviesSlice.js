@@ -3,27 +3,35 @@ import {getMovieByName, getFilteredMoviesTransform} from '../services/movieDBSer
 
 export const fetchMovies = createAsyncThunk(
   'movies/fetchMovies',
-  async function (text) {
+  async function (text, {rejectWithValue}) {
+    try {
       const response = await getMovieByName(text);
       return response;
+    }
+    catch(error) {
+      return rejectWithValue(error.message)
+    }
   }
- 
 )
 export const fetchFilteredMovies = createAsyncThunk(
   'movies/fetchFilteredMovies',
-  async function(data) {
+  async function(data, {rejectWithValue}) {
+   try {
     const {text, type} = data;
     const response = await getFilteredMoviesTransform(text, type)
     return response
+   }
+   catch(error) {
+    return rejectWithValue(error.message)
+   }
   }
 )
 
 const initialState = {
         movies: [],
-        // inputValue: '',
-        // movieDetails: [],
         selectedType: 'all',
         status: '',
+        error: null
       };
 
 const moviesSlice = createSlice({
@@ -41,18 +49,20 @@ const moviesSlice = createSlice({
       },
       setInputValue(state, action) {
         state.inputValue = action.payload
-      }
+      },
     },
     extraReducers: {
       [fetchMovies.pending] : (state) => {
         state.status = 'loading';
+        state.error = null
       },
       [fetchMovies.fulfilled] : (state, action) => {
         state.movies = action.payload
         state.status = 'fulfilled'
       },
-      [fetchMovies.rejected] : (state) => {
-        state.status = 'rejected';
+      [fetchMovies.rejected] : (state, action) => {
+        state.error = action.payload
+        state.status = 'rejected'
       },
       [fetchFilteredMovies.fulfilled]: (state, action) => {
         state.movies = action.payload
@@ -60,10 +70,15 @@ const moviesSlice = createSlice({
       },
       [fetchFilteredMovies.pending] : (state) => {
         state.status = 'loading';
+        state.error = null
+      },
+      [fetchFilteredMovies.rejected] : (state, action) => {
+        state.error = action.payload
+        state.status = 'rejected'
       },
     }
 }) 
 
-export const { cleanMovies, changeSelectedType, cleanSelectedType} = moviesSlice.actions
+export const { cleanMovies, changeSelectedType, cleanSelectedType, addToSearchHistory} = moviesSlice.actions
 export const moviesReducer = moviesSlice.reducer
 

@@ -6,11 +6,8 @@
   object-fit: cover;
 }
 
-.detailsLink {
-  /* position: absolute; */
-  /* bottom: 5px; */
-  /* left: 50%; */
-  /* transform: translateX(-50%); */
+.movieCard:hover {
+  transform: scale(1.03);
 }
 
 .detailsLink a {

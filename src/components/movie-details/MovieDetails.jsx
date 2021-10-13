@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector} from 'react-redux';
 import { getMovieDetails } from '../../services/movieDBServise';
 
 import './movieDetails.css';
@@ -73,7 +73,6 @@ export const MovieDetails = (props) => {
               <h5 className='card-title'>{title}</h5>
               <p className='card-text'>{plot}</p>
               <p className='card-text'>
-                {/* <small className='text-muted'>Last updated 3 mins ago</small> */}
               </p>
             </div>
             <li className='card-item'>Genre: {genre}</li>
